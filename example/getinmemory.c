@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 {
     CURL *curl_handle;
     CURLcode res;
-    long http_code;
+    long http_code = 0;
 
     struct MemoryStruct chunk;
 
@@ -122,6 +122,14 @@ int main(int argc, char *argv[])
          */
         curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, &http_code);
         printf("HTTP_CODE: %ld\n", http_code);
+
+        /* ask for the content-type */
+        char *ct;
+        res = curl_easy_getinfo(curl_handle, CURLINFO_CONTENT_TYPE, &ct);
+
+        if ((CURLE_OK == res) && ct) {
+            printf("We received Content-Type: [%s]\n", ct);
+        }
 
         printf("RESULT: %s\n", chunk.memory);
         printf("%lu bytes retrieved\n", (long)chunk.size);
