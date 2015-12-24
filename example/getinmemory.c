@@ -49,7 +49,7 @@ WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp)
     /** 如果缓冲区不够容纳结果,扩充缓冲区 */
     if (realsize + 1 + mem->size > mem->buf_len) {
         mem->memory = realloc(mem->memory, mem->size + realsize + 1);
-        if(mem->memory == NULL) {
+        if (mem->memory == NULL) {
             /* out of memory! */
             printf("not enough memory (realloc returned NULL)\n");
             return 0;
