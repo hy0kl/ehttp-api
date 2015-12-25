@@ -17,6 +17,13 @@ testcb(evhtp_request_t *req, void * a)
         evbuffer_add(req->buffer_out, v, strlen(v));
         evbuffer_add(req->buffer_out, "\n", sizeof("\n") - 1);
     }
+    // evbuffer_copyout() 取用户提交的 POST 数据
+    htp_method method = htparser_get_method(req->conn->parser);
+    if (htp_method_GET == method) {
+        evbuffer_add(req->buffer_out, "method=GET\n", sizeof("method=GET\n") - 1);
+    } else if (htp_method_POST == method) {
+        evbuffer_add(req->buffer_out, "method=POST\n", sizeof("method=POST\n") - 1);
+    }
 
     evbuffer_add(req->buffer_out, str, strlen(str));
     evhtp_send_reply(req, EVHTP_RES_OK);
