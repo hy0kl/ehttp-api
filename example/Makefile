@@ -34,5 +34,8 @@ $(EVHTP_BASE): $(EVHTP_BASE_OBJ)
 $(REDIS): $(REDIS_OBJ)
 	$(CC) -o $(REDIS) $(LIBDIR) $<
 
+#.c.o:
+#	$(CC) -pedantic -c $(CFLAGS) $(INCLUDEDIR) $(LIBDIR) $< -o $@
+
 clean:
 	rm $(CURLMEM) $(CURLMEM_OBJ) $(HTTP_SEVER) $(HTTP_SEVER_OBJ) $(EVHTP_BASE) $(EVHTP_BASE_OBJ) $(REDIS) $(REDIS_OBJ)

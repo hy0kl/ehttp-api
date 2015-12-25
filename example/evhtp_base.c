@@ -19,7 +19,17 @@ root(evhtp_request_t *req, void *arg)
     const char *json = "{\"code\":0,\"message\":\"ok\"}";
     evbuffer_add(req->buffer_out, json, strlen(json));
     evhtp_headers_add_header(req->headers_out,
-        evhtp_header_new("Content-Type", "application/json; charset=UTF-8", 0, 0)); 
+        evhtp_header_new("Content-Type", "application/json; charset=UTF-8", 0, 0));
+    evhtp_send_reply(req, EVHTP_RES_OK);
+}
+
+void
+default_router(evhtp_request_t *req, void *arg)
+{
+    const char *json = "{\"code\":0,\"message\":\"请求接口不存在\"}";
+    evbuffer_add(req->buffer_out, json, strlen(json));
+    evhtp_headers_add_header(req->headers_out,
+        evhtp_header_new("Content-Type", "application/json; charset=UTF-8", 0, 0));
     evhtp_send_reply(req, EVHTP_RES_OK);
 }
 
@@ -32,6 +42,7 @@ main(int argc, char ** argv) {
     evhtp_set_cb(htp, "/1/ping", testcb, "one");
     evhtp_set_cb(htp, "/1/ping.json", testcb, "two");
     evhtp_set_cb(htp, "/", root, NULL);
+    evhtp_set_glob_cb(htp, "*", default_router, NULL);
 #ifndef EVHTP_DISABLE_EVTHR
     evhtp_use_threads(htp, NULL, 8, NULL);
 #endif
