@@ -6,8 +6,17 @@
 #include <evhtp.h>
 
 void
-testcb(evhtp_request_t * req, void * a) {
+testcb(evhtp_request_t *req, void * a)
+{
     const char * str = a;
+    const char *v = NULL;
+
+    v = evhtp_kv_find(req->uri->query, "v");
+    if (v != NULL) {
+        evbuffer_add(req->buffer_out, "v=", 2);
+        evbuffer_add(req->buffer_out, v, strlen(v));
+        evbuffer_add(req->buffer_out, "\n", sizeof("\n") - 1);
+    }
 
     evbuffer_add(req->buffer_out, str, strlen(str));
     evhtp_send_reply(req, EVHTP_RES_OK);
@@ -35,8 +44,12 @@ default_router(evhtp_request_t *req, void *arg)
 
 int
 main(int argc, char ** argv) {
+    uint64_t max_keepalives = 60;
     evbase_t * evbase = event_base_new();
     evhtp_t  * htp    = evhtp_new(evbase, NULL);
+
+    //evhtp_set_parser_flags(htp, EVHTP_PARSE_QUERY_FLAG_LENIENT);
+    evhtp_set_max_keepalive_requests(htp, max_keepalives);
 
     evhtp_set_cb(htp, "/simple/", testcb, "simple");
     evhtp_set_cb(htp, "/1/ping", testcb, "one");
