@@ -30,3 +30,10 @@
 
 # Debug files
 *.dSYM/
+
+# project
+*.swp
+*.swo
+example/evhtp_base
+example/getinmemory
+example/http-server
