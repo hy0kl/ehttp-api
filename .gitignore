@@ -38,3 +38,5 @@ example/evhtp_base
 example/getinmemory
 example/http-server
 example/credis
+example/czlog
+*.log
