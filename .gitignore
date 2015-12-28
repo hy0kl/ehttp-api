@@ -40,4 +40,4 @@ example/http-server
 example/credis
 example/czlog
 api-server
-*.log
+example/*.log
