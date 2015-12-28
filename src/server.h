@@ -29,7 +29,7 @@
 #include <hiredis/hiredis.h>
 #include <evhtp.h>
 #include <curl/curl.h>
-#include <zdb/zdb.h>
+#include <zdb.h>
 #include <zlog.h>
 
 /**
