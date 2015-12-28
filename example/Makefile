@@ -1,6 +1,7 @@
 LIBDIR = -lcurl \
 		 -levhtp \
 		 -levent \
+		 -lzlog \
 		 -lhiredis
 
 CC = cc
@@ -18,9 +19,12 @@ EVHTP_BASE_OBJ = evhtp_base.o
 REDIS = credis
 REDIS_OBJ = credis.o
 
+ZLOG = czlog
+ZLOG_BOJ = czlog.o
+
 .PHONY: all clean
 
-all: $(CURLMEM) $(HTTP_SEVER) $(EVHTP_BASE) $(REDIS)
+all: $(CURLMEM) $(HTTP_SEVER) $(EVHTP_BASE) $(REDIS) $(ZLOG)
 
 $(CURLMEM): $(CURLMEM_OBJ)
 	$(CC) -o $(CURLMEM) $(LIBDIR) $<
@@ -33,6 +37,9 @@ $(EVHTP_BASE): $(EVHTP_BASE_OBJ)
 
 $(REDIS): $(REDIS_OBJ)
 	$(CC) -o $(REDIS) $(LIBDIR) $<
+
+$(ZLOG): $(ZLOG_BOJ)
+	$(CC) -o $(ZLOG) $(LIBDIR) $<
 
 #.c.o:
 #	$(CC) -pedantic -c $(CFLAGS) $(INCLUDEDIR) $(LIBDIR) $< -o $@

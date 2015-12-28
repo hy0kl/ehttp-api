@@ -23,6 +23,14 @@ testcb(evhtp_request_t *req, void * a)
         evbuffer_add(req->buffer_out, "method=GET\n", sizeof("method=GET\n") - 1);
     } else if (htp_method_POST == method) {
         evbuffer_add(req->buffer_out, "method=POST\n", sizeof("method=POST\n") - 1);
+
+        char post_buf[1024];
+        size_t content_len = evhtp_request_content_len(req);
+        snprintf(post_buf, 1024, "content_len: %zu\n", content_len);
+        evbuffer_add(req->buffer_out, post_buf, strlen(post_buf));
+        evbuffer_copyout(req->buffer_in, post_buf, content_len);
+        evbuffer_add(req->buffer_out, "POST-DATA: ", sizeof("POST-DATA: ") - 1);
+        evbuffer_add(req->buffer_out, post_buf, content_len);
     }
 
     evbuffer_add(req->buffer_out, str, strlen(str));
