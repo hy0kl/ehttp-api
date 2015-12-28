@@ -1,0 +1,43 @@
+{
+    "RUNTIME_ENVIROMENT": "DEV",
+
+    "ip": "0.0.0.0",
+    "port": 5678,
+    "backlog": 2048,
+
+    "zlog_conf": "conf/zlog.conf",
+    "zlog_category": "my_cat",
+
+    "mysql": {
+        "master": {
+            "host": "127.0.0.1",
+            "port": 3306,
+            "dbname": "test",
+            "username": "dev",
+            "password": "work@dev"
+        },
+
+        "slaves": [
+            {
+                "host": "127.0.0.1",
+                "port": 3306,
+                "dbname": "test",
+                "username": "dev",
+                "password": "work@dev"
+            }
+        ]
+    }
+
+    "redis": {
+        "storage": {
+            "host": "127.0.0.1",
+            "port": 6379
+        },
+        "cache": [
+            {
+                "host": "127.0.0.1",
+                "port": 6379
+            }
+        ]
+    }
+}
