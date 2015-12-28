@@ -22,4 +22,8 @@ $ cd DPND
 $ ./configure # Optional, if it has
 $ make
 $ sudo make install
+
+# libzdb 安装后的特殊处理
+$ cd /usr/local/include/zdb
+$ sudo cp * ../
 ```

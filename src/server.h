@@ -25,4 +25,11 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 
+/** 引入依赖库头文件 */
+#include <hiredis/hiredis.h>
+#include <evhtp.h>
+#include <curl/curl.h>
+#include <zdb/zdb.h>
+#include <zlog.h>
+
 #endif
