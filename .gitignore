@@ -39,4 +39,5 @@ example/getinmemory
 example/http-server
 example/credis
 example/czlog
+api-server
 *.log
