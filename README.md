@@ -11,3 +11,15 @@ http libevent api service
 - libzdb https://github.com/mverbert/libzdb http://www.tildeslash.com/libzdb
 - zlog http://hardysimpson.github.com/zlog/
 
+# install guide
+
+Except cJSON:
+
+```
+$ wget DPND
+$ tar xf DPND.tar*
+$ cd DPND
+$ ./configure # Optional, if it has
+$ make
+$ sudo make install
+```
