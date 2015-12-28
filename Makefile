@@ -5,13 +5,14 @@ DEPEND_LIB = -lcurl \
 		 -lzlog \
 		 -lhiredis
 
-INCLUDEDIR = -I src/
+INCLUDEDIR = -I src/ \
+			 -I contrib/cjson
 
 CC = cc
 CFLAGS = -g -Wall -Winline -pipe -fPIC
 
 TARGET = api-server
-OBJS = src/main.o
+OBJS = src/main.o contrib/cjson/cJSON.o
 
 .PHONY: all clean
 
