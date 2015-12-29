@@ -25,6 +25,30 @@ get_message(g_error_code_e code)
             msg = "Can not get zlog category, please check it out.";
             break;
 
+        case LOST_MYSQL_CONFIG:
+            msg = "Lost [mysql] config.";
+            break;
+
+        case LOST_MYSQL_MASTER_CONFIG:
+            msg = "Lost [mysql.master] config.";
+            break;
+
+        case LOST_MYSQL_MASTER_HOST:
+            msg = "Lost [mysql.master.host] config.";
+            break;
+
+        case LOST_MYSQL_MASTER_DBNAME:
+            msg = "Lost [mysql.master.dbname] config.";
+            break;
+
+        case LOST_MYSQL_MASTER_USERNAME:
+            msg = "Lost [mysql.master.username] config.";
+            break;
+
+        case LOST_MYSQL_MASTER_PASSWORD:
+            msg = "Lost [mysql.master.password] config.";
+            break;
+
         default:
             msg = "unreachable";
     }

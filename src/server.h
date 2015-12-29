@@ -60,6 +60,8 @@
 #define GETSTIME(t) (t.tv_sec)
 #define GETMTIME(t) ((((t.tv_sec) * 1000000 + (t.tv_usec))) / 1000)
 
+#define MYSQL_PORT      3306
+
 /* Port to listen on. */
 #define SERVER_PORT     5678
 #define SERVER_BACKLOG  1024
@@ -72,6 +74,12 @@ typedef enum _g_error_code_e
     JSON_PARSE_FAILURE          = -13,
     CAN_NOT_OPEN_ZLOG_CONF      = -1,
     CAN_NOT_GET_ZLOG_CATEGORY   = -2,
+    LOST_MYSQL_CONFIG           = 400100,
+    LOST_MYSQL_MASTER_CONFIG,
+    LOST_MYSQL_MASTER_HOST,
+    LOST_MYSQL_MASTER_DBNAME,
+    LOST_MYSQL_MASTER_USERNAME,
+    LOST_MYSQL_MASTER_PASSWORD,
 } g_error_code_e;
 
 /** 全局配置*/

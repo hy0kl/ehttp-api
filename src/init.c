@@ -87,6 +87,63 @@ parse_server_config()
     }
     logprintf("g_conf.zlog_category = %s", g_conf.zlog_category);
 
+    // mysql
+    cJSON *mysql = cJSON_GetObjectItem(root_json, "mysql");
+    if (NULL == mysql) {
+        fprintf(stderr, "%s\n", get_message(LOST_MYSQL_CONFIG));
+        cJSON_Delete(root_json);
+        exit(LOST_MYSQL_CONFIG);
+    }
+    // master
+    cJSON *mysql_master = cJSON_GetObjectItem(mysql, "master");
+    if (NULL == mysql_master) {
+        fprintf(stderr, "%s\n", get_message(LOST_MYSQL_MASTER_CONFIG));
+        cJSON_Delete(root_json);
+        exit(LOST_MYSQL_MASTER_CONFIG);
+    }
+    cJSON *host = cJSON_GetObjectItem(mysql_master, "host");
+    if (NULL != host) {
+        snprintf(g_conf.mysql_master.host, CONF_BUF_LEN, "%s", host->valuestring);
+    } else {
+        fprintf(stderr, "%s\n", get_message(LOST_MYSQL_MASTER_HOST));
+        cJSON_Delete(root_json);
+        exit(LOST_MYSQL_MASTER_HOST);
+    }
+    logprintf("g_conf.mysql_master.host: %s", g_conf.mysql_master.host);
+    g_conf.mysql_master.port = MYSQL_PORT;
+    port = cJSON_GetObjectItem(mysql_master, "port")->valueint;
+    if (port > 0) {
+        g_conf.mysql_master.port = (u_int)port;
+    }
+    logprintf("g_conf.mysql_master.port: %u", g_conf.mysql_master.port);
+    cJSON *dbname = cJSON_GetObjectItem(mysql_master, "dbname");
+    if (NULL != dbname) {
+        snprintf(g_conf.mysql_master.dbname, CONF_BUF_LEN, "%s", dbname->valuestring);
+    } else {
+        fprintf(stderr, "%s\n", get_message(LOST_MYSQL_MASTER_DBNAME));
+        cJSON_Delete(root_json);
+        exit(LOST_MYSQL_MASTER_DBNAME);
+    }
+    logprintf("g_conf.mysql_master.dbname: %s", g_conf.mysql_master.dbname);
+    cJSON *username = cJSON_GetObjectItem(mysql_master, "username");
+    if (NULL != username) {
+        snprintf(g_conf.mysql_master.username, CONF_BUF_LEN, "%s", username->valuestring);
+    } else {
+        fprintf(stderr, "%s\n", get_message(LOST_MYSQL_MASTER_USERNAME));
+        cJSON_Delete(root_json);
+        exit(LOST_MYSQL_MASTER_USERNAME);
+    }
+    logprintf("g_conf.mysql_master.username: %s", g_conf.mysql_master.username);
+    cJSON *password = cJSON_GetObjectItem(mysql_master, "password");
+    if (NULL != password) {
+        snprintf(g_conf.mysql_master.password, CONF_BUF_LEN, "%s", password->valuestring);
+    } else {
+        fprintf(stderr, "%s\n", get_message(LOST_MYSQL_MASTER_PASSWORD));
+        cJSON_Delete(root_json);
+        exit(LOST_MYSQL_MASTER_PASSWORD);
+    }
+    logprintf("g_conf.mysql_master.password: %s", g_conf.mysql_master.password);
+
     cJSON_Delete(root_json);
     free(data);
 
