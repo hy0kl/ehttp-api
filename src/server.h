@@ -32,12 +32,22 @@
 #include <zdb.h>
 #include <zlog.h>
 
+#include "../contrib/cjson/cJSON.h"
+
 /**
  _ __ ___   __ _  ___ _ __ ___
 | '_ ` _ \ / _` |/ __| '__/ _ \
 | | | | | | (_| | (__| | | (_) |
 |_| |_| |_|\__,_|\___|_|  \___/
 */
+#define _DEBUG_         1
+
+#if (_DEBUG_) /** { */
+#define logprintf(format, arg...) fprintf(stderr, "[DEBUG]%s:%d:%s "format"\n", __FILE__, __LINE__, __func__, ##arg)
+#else /** } {*/
+#define logprintf(format, arg...) {}
+#endif /** } */
+
 /** 配置项目缓冲区长度 */
 #define CONF_BUF_LEN    128
 /** 文件路径缓冲区长度 */
