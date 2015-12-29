@@ -12,19 +12,20 @@ CC = cc
 CFLAGS = -g -Wall -Winline -pipe -fPIC
 
 TARGET = api-server
-OBJS = src/main.o contrib/cjson/cJSON.o
+OBJS = src/main.o src/init.o contrib/cjson/cJSON.o
 
 .PHONY: all clean
 
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) -o $(TARGET) $(DEPEND_LIB) $(INCLUDEDIR) $<
+	#$(CC) -o $(TARGET) $(DEPEND_LIB) $(INCLUDEDIR) $<
+	$(CC) -g -o $@ $^ $(DEPEND_LIB) $(INCLUDEDIR)
 
 #$(OBJS): src/main.c
 
-#$.o: %c
-#	$(CC) $(CCFLAGS) $(INCLUDEDIR) $(DEPEND_LIB) -c $< -o $@
+%.o : %.c
+	$(CC) $(CCFLAGS) -c $< -o $@
 
 clean:
 	rm $(TARGET) $(OBJS)

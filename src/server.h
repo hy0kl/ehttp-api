@@ -113,6 +113,7 @@ typedef struct _server_config_t
     curl_config_t   curl_conf;
 } server_config_t;
 
+/** 或许规划到别的模块里面更好... */
 const char *
 get_message(g_error_code_e code)
 {
