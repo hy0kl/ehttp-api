@@ -49,6 +49,26 @@ get_message(g_error_code_e code)
             msg = "Lost [mysql.master.password] config.";
             break;
 
+        case LOST_MYSQL_SLAVES_CONFIG:
+            msg = "Lost [mysql.slaves] config.";
+            break;
+
+        case LOST_MYSQL_SLAVES_HOST:
+            msg = "Lost [mysql.slaves.host] config.";
+            break;
+
+        case LOST_MYSQL_SLAVES_DBNAME:
+            msg = "Lost [mysql.slaves.dbname] config.";
+            break;
+
+        case LOST_MYSQL_SLAVES_USERNAME:
+            msg = "Lost [mysql.slaves.username] config.";
+            break;
+
+        case LOST_MYSQL_SLAVES_PASSWORD:
+            msg = "Lost [mysql.slaves.password] config.";
+            break;
+
         default:
             msg = "unreachable";
     }
