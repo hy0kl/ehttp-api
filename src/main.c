@@ -4,6 +4,7 @@
  * @notice: 仅支持 *nix 系统
  * 一期不使用内存池,先出一版看效果
  * */
+#include "util.h"
 #include "init.h"
 
 int main(int argc, char *argv[])
