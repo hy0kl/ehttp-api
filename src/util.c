@@ -81,6 +81,14 @@ get_message(g_error_code_e code)
             msg = "Lost redis storage host.";
             break;
 
+        case LOST_REDIS_CACHE:
+            msg = "Lost redis cache node.";
+            break;
+
+        case LOST_REDIS_CACHE_HOST:
+            msg = "Lost redis cache host.";
+            break;
+
         default:
             msg = "unreachable";
     }

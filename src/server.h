@@ -92,6 +92,8 @@ typedef enum _g_error_code_e
     LOST_REDIS_CONFIG,
     LOST_REDIS_STORAGE,
     LOST_REDIS_STORAGE_HOST,
+    LOST_REDIS_CACHE,
+    LOST_REDIS_CACHE_HOST,
 } g_error_code_e;
 
 /** 全局配置*/

@@ -152,11 +152,6 @@ parse_server_config()
 
     // mysql_slaves
     cJSON *mysql_slaves = cJSON_GetObjectItem(mysql, "slaves");
-    if (NULL == mysql_slaves) {
-        fprintf(stderr, "%s\n", get_message(LOST_MYSQL_SLAVES_CONFIG));
-        cJSON_Delete(root_json);
-        exit(LOST_MYSQL_SLAVES_CONFIG);
-    }
     int mysql_slaves_count = cJSON_GetArraySize(mysql_slaves);
     if (mysql_slaves_count <= 0) {
         fprintf(stderr, "%s\n", get_message(LOST_MYSQL_SLAVES_CONFIG));
@@ -261,6 +256,49 @@ parse_server_config()
         g_conf.redis_storage.timeout = timeout;
     }
     logprintf("g_conf.redis_storage.timeout: %dms", g_conf.redis_storage.timeout);
+    /// cache
+    cJSON *redis_cache = cJSON_GetObjectItem(redis, "cache");
+    int redis_cache_count = cJSON_GetArraySize(redis_cache);
+    if (redis_cache_count <= 0) {
+        fprintf(stderr, "%s", get_message(LOST_REDIS_CACHE));
+        cJSON_Delete(root_json);
+        exit(LOST_REDIS_CACHE);
+    }
+    g_conf.redis_cache_count = redis_cache_count;
+    logprintf("g_conf.redis_cache_count: %d", g_conf.redis_cache_count);
+    g_conf.redis_cache_array = (redis_config_t *)malloc(sizeof(redis_config_t) * g_conf.redis_cache_count);
+    if (NULL == g_conf.redis_cache_array) {
+        fprintf(stderr, "g_conf.redis_cache_array %s\n", get_message(NEED_MORE_MEMORY));
+        cJSON_Delete(root_json);
+        exit(NEED_MORE_MEMORY);
+    }
+    for (i = 0; i < g_conf.redis_cache_count; i++) {
+        cJSON * cache_item = cJSON_GetArrayItem(redis_cache, i);
+        //// host
+        host = cJSON_GetObjectItem(cache_item, "host");
+        if (NULL != host) {
+            snprintf(g_conf.redis_cache_array[i].host, CONF_BUF_LEN, "%s", host->valuestring);
+        } else {
+            fprintf(stderr, "index: %d, %s\n", i, get_message(LOST_REDIS_CACHE_HOST));
+            cJSON_Delete(root_json);
+            exit(LOST_REDIS_CACHE_HOST);
+        }
+        logprintf("g_conf.redis_cache_array[%d].host: %s", i, g_conf.redis_cache_array[i].host);
+        //// port
+        g_conf.redis_cache_array[i].port = REDIS_PORT;
+        port = cJSON_GetObjectItem(cache_item, "port")->valueint;
+        if (port > 0) {
+            g_conf.redis_cache_array[i].port = port;
+        }
+        logprintf("g_conf.redis_cache_array[%d].port: %u", i, g_conf.redis_cache_array[i].port);
+        //// timeout
+        g_conf.redis_cache_array[i].timeout = REDIT_TIMEOUT;
+        timeout = cJSON_GetObjectItem(cache_item, "timeout")->valueint;
+        if (timeout > 0) {
+            g_conf.redis_cache_array[i].timeout = timeout;
+        }
+        logprintf("g_conf.redis_cache_array[%d].timeout: %u", i, g_conf.redis_cache_array[i].timeout);
+    }
 
     cJSON_Delete(root_json);
     free(data);
