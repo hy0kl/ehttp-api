@@ -55,6 +55,7 @@
 
 #define SMALL_BUF_LEN       8
 #define CURL_CHUNK_BUF_LEN  10240
+#define CURL_TIMEOUT        450
 
 #define GETUTIME(t) ((t.tv_sec) * 1000000 + (t.tv_usec))
 #define GETSTIME(t) (t.tv_sec)
