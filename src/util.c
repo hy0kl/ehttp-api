@@ -101,8 +101,18 @@ get_message(g_error_code_e code)
 }
 
 void
+log_uri(evhtp_request_t *req)
+{
+    zlog_info(g_zc, "uri: %s%s%s",
+            req->uri->path->full,
+            req->uri->query_raw ? "?" : "",
+            req->uri->query_raw ? (char *)req->uri->query_raw : "");
+}
+
+void
 default_router(evhtp_request_t *req, void *arg)
 {
+    log_uri(req);
     const char *json = "{\"code\":0,\"message\":\"请求接口不存在\"}";
     evbuffer_add(req->buffer_out, json, strlen(json));
     evhtp_headers_add_header(req->headers_out,

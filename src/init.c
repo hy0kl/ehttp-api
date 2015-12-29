@@ -353,6 +353,8 @@ init_global()
         zlog_fini();
         exit(CAN_NOT_GET_ZLOG_CATEGORY);
     }
+
+    // 初始化数据库链接池
 }
 
 void init()
