@@ -18,7 +18,11 @@ ConnectionPool_T *mysql_slaves_pool;
 int main(int argc, char *argv[])
 {
     init();
-    printf("api server.\n");
+    // 日志库开启了
+    zlog_info(g_zc, "初始化成功");
+
+    // 清理 clean
+    zlog_fini();
     return 0;
 }
 

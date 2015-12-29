@@ -339,6 +339,20 @@ static void
 init_global()
 {
     logprintf("init global");
+    // 初始化日志库
+    int rc;
+    rc = zlog_init(g_conf.zlog_conf);
+    if (rc) {
+        fprintf(stderr, "init failed, can not find %s file\n", g_conf.zlog_conf);
+        exit(CAN_NOT_OPEN_ZLOG_CONF);
+    }
+
+    g_zc = zlog_get_category(g_conf.zlog_category);
+    if (!g_zc) {
+        fprintf(stderr, "%s\n", get_message(CAN_NOT_GET_ZLOG_CATEGORY));
+        zlog_fini();
+        exit(CAN_NOT_GET_ZLOG_CATEGORY);
+    }
 }
 
 void init()
