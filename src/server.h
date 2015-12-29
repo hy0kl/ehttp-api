@@ -83,6 +83,14 @@ typedef struct _redis_config_t
     u_int timeout;  /** 超时时间,单位毫秒 */
 } redis_config_t;
 
+// curl 配置
+typedef struct _curl_config_t
+{
+    // curl 的超时设置
+    u_int connect_timeout_ms;
+    u_int timeout_ms;
+} curl_config_t;
+
 typedef struct _server_config_t
 {
     char  env[SMALL_BUF_LEN];
@@ -101,6 +109,8 @@ typedef struct _server_config_t
     redis_config_t  redis_storage;  /** redis 存储是单点 */
     u_int           redis_cache_count;
     redis_config_t *redis_cache_array;  /** 缓存是一组服务 */
+
+    curl_config_t   curl_conf;
 } server_config_t;
 
 /** 全局变量 */

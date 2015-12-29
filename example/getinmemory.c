@@ -100,10 +100,10 @@ int main(int argc, char *argv[])
     curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, 1L);
 
     /* complete connection within 100 milliseconds */
-    curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT, 100L);
+    curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT_MS, 350L);
 
     /* complete within 300 milliseconds */
-    curl_easy_setopt(curl_handle, CURLOPT_TIMEOUT_MS, 300L);
+    curl_easy_setopt(curl_handle, CURLOPT_TIMEOUT_MS, 500L);
 
     /* get it! */
     res = curl_easy_perform(curl_handle);

@@ -26,7 +26,7 @@
                 "password": "work@dev"
             }
         ]
-    }
+    },
 
     "redis": {
         "storage": {
@@ -41,5 +41,10 @@
                 "timeout": 500
             }
         ]
+    },
+
+    "curl": {
+        "connect_timeout_ms": 350,
+        "timeout_ms": 500
     }
 }
