@@ -2,7 +2,9 @@
  * @describe: 基于 libehtp 的接口项目
  * @author: Jerry Yang(hy0kle@gmail.com)
  * @notice: 仅支持 *nix 系统
- * 一期不使用内存池,先出一版看效果
+ * TODO
+ * 1. 一期不使用内存池,先出一版看效果
+ * 2. redis storage 应该也配置成主从,先不实现.
  * */
 #include "util.h"
 #include "init.h"

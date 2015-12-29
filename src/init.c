@@ -223,6 +223,45 @@ parse_server_config()
         logprintf("g_conf.mysql_slaves_array[%d].password: %s", i, g_conf.mysql_slaves_array[i].password);
     }
 
+    // redis
+    cJSON *redis = cJSON_GetObjectItem(root_json, "redis");
+    if (NULL == redis) {
+        fprintf(stderr, "%s\n", get_message(LOST_REDIS_CONFIG));
+        cJSON_Delete(root_json);
+        exit(LOST_REDIS_CONFIG);
+    }
+    /// storage
+    cJSON *redis_storage = cJSON_GetObjectItem(redis, "storage");
+    if (NULL == redis_storage) {
+        fprintf(stderr, "%s\n", get_message(LOST_REDIS_STORAGE));
+        cJSON_Delete(root_json);
+        exit(LOST_REDIS_STORAGE);
+    }
+    //// host
+    host = cJSON_GetObjectItem(redis_storage, "host");
+    if (NULL != host) {
+        snprintf(g_conf.redis_storage.host, CONF_BUF_LEN, "%s", host->valuestring);
+    } else {
+        fprintf(stderr, "%s\n", get_message(LOST_REDIS_STORAGE));
+        cJSON_Delete(root_json);
+        exit(LOST_REDIS_STORAGE_HOST);
+    }
+    logprintf("g_conf.redis_storage.host: %s", g_conf.redis_storage.host);
+    //// port
+    g_conf.redis_storage.port = REDIS_PORT;
+    port = cJSON_GetObjectItem(redis_storage, "port")->valueint;
+    if (port > 0) {
+        g_conf.redis_storage.port = port;
+    }
+    logprintf("g_conf.redis_storage.port: %d", g_conf.redis_storage.port);
+    //// timeout
+    g_conf.redis_storage.timeout = REDIT_TIMEOUT;
+    int timeout = cJSON_GetObjectItem(redis_storage, "timeout")->valueint;
+    if (timeout > 0) {
+        g_conf.redis_storage.timeout = timeout;
+    }
+    logprintf("g_conf.redis_storage.timeout: %dms", g_conf.redis_storage.timeout);
+
     cJSON_Delete(root_json);
     free(data);
 

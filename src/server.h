@@ -61,6 +61,8 @@
 #define GETMTIME(t) ((((t.tv_sec) * 1000000 + (t.tv_usec))) / 1000)
 
 #define MYSQL_PORT      3306
+#define REDIS_PORT      6379
+#define REDIT_TIMEOUT   100
 
 /* Port to listen on. */
 #define SERVER_PORT     5678
@@ -86,6 +88,10 @@ typedef enum _g_error_code_e
     LOST_MYSQL_SLAVES_DBNAME,
     LOST_MYSQL_SLAVES_USERNAME,
     LOST_MYSQL_SLAVES_PASSWORD,
+
+    LOST_REDIS_CONFIG,
+    LOST_REDIS_STORAGE,
+    LOST_REDIS_STORAGE_HOST,
 } g_error_code_e;
 
 /** 全局配置*/

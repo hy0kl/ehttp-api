@@ -69,6 +69,18 @@ get_message(g_error_code_e code)
             msg = "Lost [mysql.slaves.password] config.";
             break;
 
+        case LOST_REDIS_CONFIG:
+            msg = "Lost redis config node.";
+            break;
+
+        case LOST_REDIS_STORAGE:
+            msg = "Lost redis storage node.";
+            break;
+
+        case LOST_REDIS_STORAGE_HOST:
+            msg = "Lost redis storage host.";
+            break;
+
         default:
             msg = "unreachable";
     }
