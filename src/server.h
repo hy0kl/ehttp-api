@@ -61,7 +61,8 @@
 #define GETMTIME(t) ((((t.tv_sec) * 1000000 + (t.tv_usec))) / 1000)
 
 /* Port to listen on. */
-#define SERVER_PORT 5678
+#define SERVER_PORT     5678
+#define SERVER_BACKLOG  1024
 
 /** 全局状态码/错误码 */
 typedef enum _g_error_code_e

@@ -7,6 +7,12 @@
 #include "util.h"
 #include "init.h"
 
+/** 全局变量 */
+server_config_t   g_conf;
+zlog_category_t  *g_zc;
+ConnectionPool_T  mysql_master_pool;
+ConnectionPool_T *mysql_slaves_pool;
+
 int main(int argc, char *argv[])
 {
     init();
