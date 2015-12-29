@@ -113,6 +113,38 @@ typedef struct _server_config_t
     curl_config_t   curl_conf;
 } server_config_t;
 
+const char *
+get_message(g_error_code_e code)
+{
+    const char *msg = NULL;
+    switch (code) {
+        case CAN_NOT_OPEN_SERVER_JSON:
+            msg = "Can not open server.json file.";
+            break;
+
+        case NEED_MORE_MEMORY:
+            msg = "Out of memory.";
+            break;
+
+        case JSON_PARSE_FAILURE:
+            msg = "json file paser error, please check it out.";
+            break;
+
+        case CAN_NOT_OPEN_ZLOG_CONF:
+            msg = "Can not open zlog.conf";
+            break;
+
+        case CAN_NOT_GET_ZLOG_CATEGORY:
+            msg = "Can not get zlog category, please check it out.";
+            break;
+
+        default:
+            msg = "unreachable";
+    }
+
+    return msg;
+}
+
 /** 全局变量 */
 extern server_config_t   g_conf;
 extern zlog_category_t  *g_zc;
