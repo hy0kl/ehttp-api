@@ -12,5 +12,9 @@
 const char *
 get_message(g_error_code_e code);
 
+void
+default_router(evhtp_request_t *req, void *arg);
+
+void clean(void);
 #endif
 

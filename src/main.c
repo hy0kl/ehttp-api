@@ -21,8 +21,25 @@ int main(int argc, char *argv[])
     // 日志库开启了
     zlog_info(g_zc, "初始化成功");
 
+    uint64_t max_keepalives = 60;
+    evbase_t * evbase = event_base_new();
+    evhtp_t  * htp    = evhtp_new(evbase, NULL);
+
+    evhtp_set_max_keepalive_requests(htp, max_keepalives);
+
+    // 注册路由
+    evhtp_set_glob_cb(htp, "*", default_router, NULL);
+
+    evhtp_bind_socket(htp, g_conf.ip, g_conf.port, g_conf.backlog);
+
+    event_base_loop(evbase, 0);
+
+    evhtp_unbind_socket(htp);
+    evhtp_free(htp);
+    event_base_free(evbase);
+
     // 清理 clean
-    zlog_fini();
+    clean();
     return 0;
 }
 
