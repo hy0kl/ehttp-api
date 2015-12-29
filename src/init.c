@@ -5,8 +5,7 @@ parse_server_config()
 {
     logprintf("parse");
     FILE *fp = fopen("conf/server.json", "r");
-    if (NULL == fp)
-    {
+    if (NULL == fp) {
         fprintf(stderr, "无法打开主配置文件: conf/server.json\n");
         exit(CAN_NOT_OPEN_SERVER_JSON);
     }
@@ -17,8 +16,7 @@ parse_server_config()
 
     char *data = (char*)malloc(len + 1);
 
-    if (NULL == data)
-    {
+    if (NULL == data) {
         fprintf(stderr, "无法为解析配置文件申请足够的内存. need: %ld\n", len);
         exit(NEED_MORE_MEMORY);
     }
@@ -28,8 +26,7 @@ parse_server_config()
 
     /** 解析 json 的配置文件 */
     cJSON *root_json = cJSON_Parse(data);
-    if (NULL == root_json)
-    {
+    if (NULL == root_json) {
         fprintf(stderr, "解析JSON失败, error:%s\n", cJSON_GetErrorPtr());
 
         cJSON_Delete(root_json);
@@ -56,6 +53,7 @@ parse_server_config()
     }
     logprintf("g_conf.ip: %s", g_conf.ip);
 
+    // port
     g_conf.port = SERVER_PORT;  /** 默认监听端口 */
     int port = cJSON_GetObjectItem(root_json, "port")->valueint;
     if (port > 0) {
@@ -63,6 +61,7 @@ parse_server_config()
     }
     logprintf("g_conf.port = %d", g_conf.port);
 
+    // backlog
     g_conf.backlog = SERVER_BACKLOG;
     int backlog = cJSON_GetObjectItem(root_json, "backlog")->valueint;
     if (backlog > 0) {
@@ -70,6 +69,7 @@ parse_server_config()
     }
     logprintf("g_conf.backlog: %u", g_conf.backlog);
 
+    // zlog_conf
     cJSON *zlog_conf = cJSON_GetObjectItem(root_json, "zlog_conf");
     if (NULL != zlog_conf) {
         snprintf(g_conf.zlog_conf, CONF_BUF_LEN, "%s", zlog_conf->valuestring);
@@ -78,6 +78,7 @@ parse_server_config()
     }
     logprintf("g_conf.zlog_conf = %s", g_conf.zlog_conf);
 
+    // zlog_category
     cJSON *zlog_category = cJSON_GetObjectItem(root_json, "zlog_category");
     if (NULL != zlog_category) {
         snprintf(g_conf.zlog_category, CONF_BUF_LEN, "%s", zlog_category->valuestring);
