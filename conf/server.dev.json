@@ -44,6 +44,7 @@
     },
 
     "curl": {
+        "chunk_buf_len": 10248,
         "connect_timeout_ms": 350,
         "timeout_ms": 500
     }

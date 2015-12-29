@@ -19,10 +19,7 @@ OBJS = src/main.o src/util.o src/init.o contrib/cjson/cJSON.o
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	#$(CC) -o $(TARGET) $(DEPEND_LIB) $(INCLUDEDIR) $<
 	$(CC) -g -o $@ $^ $(DEPEND_LIB) $(INCLUDEDIR)
-
-#$(OBJS): src/main.c
 
 %.o : %.c
 	$(CC) $(CCFLAGS) -c $< -o $@

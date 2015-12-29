@@ -55,17 +55,17 @@ parse_server_config()
 
     // port
     g_conf.port = SERVER_PORT;  /** 默认监听端口 */
-    int port = cJSON_GetObjectItem(root_json, "port")->valueint;
-    if (port > 0) {
-        g_conf.port = (u_int)port;
+    cJSON *port = cJSON_GetObjectItem(root_json, "port");
+    if (port && port->valueint > 0) {
+        g_conf.port = port->valueint;
     }
     logprintf("g_conf.port = %d", g_conf.port);
 
     // backlog
     g_conf.backlog = SERVER_BACKLOG;
-    int backlog = cJSON_GetObjectItem(root_json, "backlog")->valueint;
-    if (backlog > 0) {
-        g_conf.backlog = (u_int)backlog;
+    cJSON *backlog = cJSON_GetObjectItem(root_json, "backlog");
+    if (backlog && backlog->valueint > 0) {
+        g_conf.backlog = backlog->valueint;
     }
     logprintf("g_conf.backlog: %u", g_conf.backlog);
 
@@ -114,9 +114,9 @@ parse_server_config()
     logprintf("g_conf.mysql_master.host: %s", g_conf.mysql_master.host);
     //// port
     g_conf.mysql_master.port = MYSQL_PORT;
-    port = cJSON_GetObjectItem(mysql_master, "port")->valueint;
-    if (port > 0) {
-        g_conf.mysql_master.port = (u_int)port;
+    port = cJSON_GetObjectItem(mysql_master, "port");
+    if (port && port->valueint > 0) {
+        g_conf.mysql_master.port = port->valueint;
     }
     logprintf("g_conf.mysql_master.port: %u", g_conf.mysql_master.port);
     //// dbname
@@ -181,9 +181,9 @@ parse_server_config()
         logprintf("g_conf.mysql_slaves_array[%d].host: %s", i, g_conf.mysql_slaves_array[i].host);
         //// port
         g_conf.mysql_slaves_array[i].port = MYSQL_PORT;
-        port = cJSON_GetObjectItem(slave_item, "port")->valueint;
-        if (port > 0) {
-            g_conf.mysql_slaves_array[i].port = (u_int)port;
+        port = cJSON_GetObjectItem(slave_item, "port");
+        if (port && port->valueint > 0) {
+            g_conf.mysql_slaves_array[i].port = port->valueint;
         }
         logprintf("g_conf.mysql_slaves_array[%d].port: %u", i, g_conf.mysql_slaves_array[i].port);
         //// dbname
@@ -244,16 +244,16 @@ parse_server_config()
     logprintf("g_conf.redis_storage.host: %s", g_conf.redis_storage.host);
     //// port
     g_conf.redis_storage.port = REDIS_PORT;
-    port = cJSON_GetObjectItem(redis_storage, "port")->valueint;
-    if (port > 0) {
-        g_conf.redis_storage.port = port;
+    port = cJSON_GetObjectItem(redis_storage, "port");
+    if (port && port->valueint > 0) {
+        g_conf.redis_storage.port = port->valueint;
     }
     logprintf("g_conf.redis_storage.port: %d", g_conf.redis_storage.port);
     //// timeout
     g_conf.redis_storage.timeout = REDIT_TIMEOUT;
-    int timeout = cJSON_GetObjectItem(redis_storage, "timeout")->valueint;
-    if (timeout > 0) {
-        g_conf.redis_storage.timeout = timeout;
+    cJSON *timeout = cJSON_GetObjectItem(redis_storage, "timeout");
+    if (timeout && timeout->valueint > 0) {
+        g_conf.redis_storage.timeout = timeout->valueint;
     }
     logprintf("g_conf.redis_storage.timeout: %dms", g_conf.redis_storage.timeout);
     /// cache
@@ -286,19 +286,34 @@ parse_server_config()
         logprintf("g_conf.redis_cache_array[%d].host: %s", i, g_conf.redis_cache_array[i].host);
         //// port
         g_conf.redis_cache_array[i].port = REDIS_PORT;
-        port = cJSON_GetObjectItem(cache_item, "port")->valueint;
-        if (port > 0) {
-            g_conf.redis_cache_array[i].port = port;
+        port = cJSON_GetObjectItem(cache_item, "port");
+        if (port && port->valueint > 0) {
+            g_conf.redis_cache_array[i].port = port->valueint;
         }
         logprintf("g_conf.redis_cache_array[%d].port: %u", i, g_conf.redis_cache_array[i].port);
         //// timeout
         g_conf.redis_cache_array[i].timeout = REDIT_TIMEOUT;
-        timeout = cJSON_GetObjectItem(cache_item, "timeout")->valueint;
-        if (timeout > 0) {
-            g_conf.redis_cache_array[i].timeout = timeout;
+        timeout = cJSON_GetObjectItem(cache_item, "timeout");
+        if (timeout && timeout->valueint > 0) {
+            g_conf.redis_cache_array[i].timeout = timeout->valueint;
         }
         logprintf("g_conf.redis_cache_array[%d].timeout: %u", i, g_conf.redis_cache_array[i].timeout);
     }
+
+    // curl
+    cJSON *curl = cJSON_GetObjectItem(root_json, "curl");
+    if (NULL == curl) {
+        fprintf(stderr, "%s\n", get_message(LOST_CURL_CONFIG));
+        cJSON_Delete(root_json);
+        exit(LOST_CURL_CONFIG);
+    }
+    // chunk_buf_len
+    g_conf.curl_conf.chunk_buf_len = CURL_CHUNK_BUF_LEN;
+    cJSON *chunk_buf_len = cJSON_GetObjectItem(curl, "chunk_buf_len");
+    if (chunk_buf_len && chunk_buf_len->valueint > CURL_CHUNK_BUF_LEN) {
+        g_conf.curl_conf.chunk_buf_len = chunk_buf_len->valueint;
+    }
+    logprintf("g_conf.curl_conf.chunk_buf_len: %d", g_conf.curl_conf.chunk_buf_len);
 
     cJSON_Delete(root_json);
     free(data);

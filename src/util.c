@@ -89,6 +89,10 @@ get_message(g_error_code_e code)
             msg = "Lost redis cache host.";
             break;
 
+        case LOST_CURL_CONFIG:
+            msg = "Lost curl config node.";
+            break;
+
         default:
             msg = "unreachable";
     }

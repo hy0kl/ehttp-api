@@ -94,6 +94,8 @@ typedef enum _g_error_code_e
     LOST_REDIS_STORAGE_HOST,
     LOST_REDIS_CACHE,
     LOST_REDIS_CACHE_HOST,
+
+    LOST_CURL_CONFIG,
 } g_error_code_e;
 
 /** 全局配置*/
@@ -120,8 +122,9 @@ typedef struct _redis_config_t
 typedef struct _curl_config_t
 {
     // curl 的超时设置
-    u_int connect_timeout_ms;
-    u_int timeout_ms;
+    u_int chunk_buf_len;
+    long  connect_timeout_ms;
+    long  timeout_ms;
 } curl_config_t;
 
 typedef struct _server_config_t
