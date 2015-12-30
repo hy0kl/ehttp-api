@@ -69,6 +69,11 @@
 #define SERVER_PORT     5678
 #define SERVER_BACKLOG  1024
 
+/** API 响应结构 {"code":0,"message":"OK","data":{}} */
+#define RES_CODE    "code"
+#define RES_MSG     "message"
+#define RES_DATA    "data"
+
 /** 全局状态码/错误码 */
 typedef enum _g_error_code_e
 {

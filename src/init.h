@@ -4,6 +4,7 @@
 #include "server.h"
 #include "util.h"
 
+/** 初始化 */
 void
 init();
 

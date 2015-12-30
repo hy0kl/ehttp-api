@@ -113,6 +113,22 @@ log_uri(evhtp_request_t *req)
             req->uri->query_raw ? (char *)req->uri->query_raw : "");
 }
 
+g_error_code_e
+get_master_db_link(Connection_T *db_link)
+{
+    *db_link = ConnectionPool_getConnection(g_conf.mysql_master.pool);
+    return API_OK;
+}
+
+g_error_code_e
+get_slave_db_link(Connection_T *db_link)
+{
+    int index    = rand() % g_conf.mysql_slaves_count;
+    *db_link = ConnectionPool_getConnection(g_conf.mysql_slaves_array[index].pool);
+    zlog_debug(g_zc, "select slave: %d", index);
+    return API_OK;
+}
+
 void
 default_router(evhtp_request_t *req, void *arg)
 {
