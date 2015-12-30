@@ -3,6 +3,8 @@ DEPEND_LIB = -lcurl \
 		 -levhtp \
 		 -lzdb \
 		 -lzlog \
+		 -lpthread \
+		 -lm \
 		 -lhiredis
 
 INCLUDEDIR = -I src/ \
