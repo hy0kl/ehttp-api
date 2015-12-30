@@ -250,7 +250,7 @@ parse_server_config()
     }
     logprintf("g_conf.redis_storage.port: %d", g_conf.redis_storage.port);
     //// timeout
-    g_conf.redis_storage.timeout = REDIT_TIMEOUT;
+    g_conf.redis_storage.timeout = REDIS_TIMEOUT;
     cJSON *timeout = cJSON_GetObjectItem(redis_storage, "timeout");
     if (timeout && timeout->valueint > 0) {
         g_conf.redis_storage.timeout = timeout->valueint;
@@ -292,7 +292,7 @@ parse_server_config()
         }
         logprintf("g_conf.redis_cache_array[%d].port: %u", i, g_conf.redis_cache_array[i].port);
         //// timeout
-        g_conf.redis_cache_array[i].timeout = REDIT_TIMEOUT;
+        g_conf.redis_cache_array[i].timeout = REDIS_TIMEOUT;
         timeout = cJSON_GetObjectItem(cache_item, "timeout");
         if (timeout && timeout->valueint > 0) {
             g_conf.redis_cache_array[i].timeout = timeout->valueint;
@@ -315,14 +315,14 @@ parse_server_config()
     }
     logprintf("g_conf.curl_conf.chunk_buf_len: %d", g_conf.curl_conf.chunk_buf_len);
     // connect_timeout_ms
-    g_conf.curl_conf.connect_timeout_ms = REDIT_TIMEOUT;
+    g_conf.curl_conf.connect_timeout_ms = REDIS_TIMEOUT;
     cJSON *connect_timeout_ms = cJSON_GetObjectItem(curl, "connect_timeout_ms");
     if (connect_timeout_ms && connect_timeout_ms->valueint > 0) {
         g_conf.curl_conf.connect_timeout_ms = connect_timeout_ms->valueint;
     }
     logprintf("g_conf.curl_conf.connect_timeout_ms: %ldms", g_conf.curl_conf.connect_timeout_ms);
     // timeout_ms
-    g_conf.curl_conf.timeout_ms = REDIT_TIMEOUT;
+    g_conf.curl_conf.timeout_ms = REDIS_TIMEOUT;
     cJSON *timeout_ms = cJSON_GetObjectItem(curl, "timeout_ms");
     if (timeout_ms && timeout_ms->valueint > 0) {
         g_conf.curl_conf.timeout_ms = timeout_ms->valueint;
@@ -392,3 +392,4 @@ void init()
     parse_server_config();
     init_global();
 }
+

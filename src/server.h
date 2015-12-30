@@ -63,7 +63,7 @@
 
 #define MYSQL_PORT      3306
 #define REDIS_PORT      6379
-#define REDIT_TIMEOUT   100
+#define REDIS_TIMEOUT   100
 
 /* Port to listen on. */
 #define SERVER_PORT     5678
@@ -78,7 +78,10 @@ typedef enum _g_error_code_e
     CAN_NOT_OPEN_ZLOG_CONF      = -1,
     CAN_NOT_GET_ZLOG_CATEGORY   = -2,
 
-    LOST_MYSQL_CONFIG           = 400100,
+    API_OK = 0,
+
+    // mysql
+    LOST_MYSQL_CONFIG           = 100,
     LOST_MYSQL_MASTER_CONFIG,
     LOST_MYSQL_MASTER_HOST,
     LOST_MYSQL_MASTER_DBNAME,
@@ -90,6 +93,7 @@ typedef enum _g_error_code_e
     LOST_MYSQL_SLAVES_USERNAME,
     LOST_MYSQL_SLAVES_PASSWORD,
 
+    // redis
     LOST_REDIS_CONFIG,
     LOST_REDIS_STORAGE,
     LOST_REDIS_STORAGE_HOST,

@@ -13,6 +13,10 @@ get_message(g_error_code_e code)
             msg = "Out of memory.";
             break;
 
+        case API_OK:
+            msg = "OK";
+            break;
+
         case JSON_PARSE_FAILURE:
             msg = "json file paser error, please check it out.";
             break;
