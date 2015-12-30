@@ -15,6 +15,9 @@ zlog_category_t  *g_zc;
 
 int main(int argc, char *argv[])
 {
+    // 随机数播种
+    srand((unsigned)time(NULL));
+
     init();
     // 日志库开启了
     zlog_info(g_zc, "工作环境初始化成功, Let's work.");
