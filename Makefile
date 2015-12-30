@@ -12,7 +12,9 @@ CC = cc
 CFLAGS = -g -Wall -Winline -pipe -fPIC
 
 TARGET = api-server
-OBJS = src/main.o src/util.o src/init.o contrib/cjson/cJSON.o
+OBJS = src/main.o src/util.o src/init.o \
+	   src/account_demo.o \
+	   contrib/cjson/cJSON.o
 
 .PHONY: all clean
 

@@ -113,6 +113,13 @@ log_uri(evhtp_request_t *req)
             req->uri->query_raw ? (char *)req->uri->query_raw : "");
 }
 
+void
+set_json_header(evhtp_request_t *req)
+{
+    evhtp_headers_add_header(req->headers_out,
+        evhtp_header_new("Content-Type", "application/json; charset=UTF-8", 0, 0));
+}
+
 g_error_code_e
 get_master_db_link(Connection_T *db_link)
 {
@@ -135,8 +142,7 @@ default_router(evhtp_request_t *req, void *arg)
     log_uri(req);
     const char *json = "{\"code\":0,\"message\":\"请求接口不存在\"}";
     evbuffer_add(req->buffer_out, json, strlen(json));
-    evhtp_headers_add_header(req->headers_out,
-        evhtp_header_new("Content-Type", "application/json; charset=UTF-8", 0, 0));
+    set_json_header(req);
     evhtp_send_reply(req, EVHTP_RES_OK);
 }
 

@@ -21,6 +21,10 @@ get_master_db_link(Connection_T *db_link);
 g_error_code_e
 get_slave_db_link(Connection_T *db_link);
 
+/** 设置 json 头 */
+void
+set_json_header(evhtp_request_t *req);
+
 /** 打印 access 日志 */
 void
 log_uri(evhtp_request_t *req);

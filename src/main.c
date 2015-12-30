@@ -9,6 +9,9 @@
 #include "util.h"
 #include "init.h"
 
+/** 业务逻辑 */
+#include "account_demo.h"
+
 /** 全局变量 */
 server_config_t   g_conf;
 zlog_category_t  *g_zc;
@@ -29,6 +32,7 @@ int main(int argc, char *argv[])
     evhtp_set_max_keepalive_requests(htp, max_keepalives);
 
     // 注册路由
+    evhtp_set_glob_cb(htp, "/account/demo", account_demo, NULL);
     evhtp_set_glob_cb(htp, "*", default_router, NULL);
 
     evhtp_bind_socket(htp, g_conf.ip, g_conf.port, g_conf.backlog);
