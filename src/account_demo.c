@@ -67,7 +67,8 @@ account_demo(evhtp_request_t *req, void *arg)
     }
     END_TRY;
 
-    char *json = cJSON_Print(root_json);
+    //char *json = cJSON_Print(root_json);
+    char *json = cJSON_PrintUnformatted(root_json);
     evbuffer_add(req->buffer_out, json, strlen(json));
 
     // 清除内存
