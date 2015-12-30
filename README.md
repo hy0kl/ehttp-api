@@ -24,6 +24,13 @@ $ make
 $ sudo make install
 
 # libevhtp 的特殊处理
+由于内网的 http 服务,可以将 openssl 禁掉.
+$ cd libevhtp-*
+$ vim evhtp.h
+加入以下内容:
+#define EVHTP_DISABLE_SSL 1
+
+安装成功后执行:
 $ cd /usr/local/include/evhtp
 $ sudo cp * ../
 
