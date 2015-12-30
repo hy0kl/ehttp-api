@@ -123,5 +123,9 @@ default_router(evhtp_request_t *req, void *arg)
 void
 clean(void)
 {
+    // 销毁数据库连接池
+    ConnectionPool_free(&g_conf.mysql_master.pool);
+    URL_free(&g_conf.mysql_master.url);
+
     zlog_fini();
 }

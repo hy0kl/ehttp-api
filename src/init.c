@@ -354,7 +354,21 @@ init_global()
         exit(CAN_NOT_GET_ZLOG_CATEGORY);
     }
 
+    zlog_debug(g_zc, "日志库初始化成功");
+
     // 初始化数据库链接池
+    char url_buf[CONF_BUF_LEN];
+    snprintf(url_buf, CONF_BUF_LEN, "mysql://%s:%d/%s?user=%s&password=%s",
+            g_conf.mysql_master.host, g_conf.mysql_master.port,
+            g_conf.mysql_master.dbname, g_conf.mysql_master.username,
+            g_conf.mysql_master.password);
+    logprintf("mysql.master.dns-url: %s", url_buf);
+
+    g_conf.mysql_master.url  = URL_new(url_buf);
+    g_conf.mysql_master.pool = ConnectionPool_new(g_conf.mysql_master.url);
+    ConnectionPool_start(g_conf.mysql_master.pool);
+
+    zlog_debug(g_zc, "数据库连接池初始化成功");
 }
 
 void init()

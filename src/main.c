@@ -12,14 +12,12 @@
 /** 全局变量 */
 server_config_t   g_conf;
 zlog_category_t  *g_zc;
-ConnectionPool_T  mysql_master_pool;
-ConnectionPool_T *mysql_slaves_pool;
 
 int main(int argc, char *argv[])
 {
     init();
     // 日志库开启了
-    zlog_info(g_zc, "初始化成功");
+    zlog_info(g_zc, "工作环境初始化成功, Let's work.");
 
     uint64_t max_keepalives = 60;
     evbase_t * evbase = event_base_new();

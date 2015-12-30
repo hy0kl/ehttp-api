@@ -14,7 +14,7 @@
             "port": 3306,
             "dbname": "test",
             "username": "dev",
-            "password": "work@dev"
+            "password": "dev"
         },
 
         "slaves": [
@@ -23,7 +23,7 @@
                 "port": 3306,
                 "dbname": "test",
                 "username": "dev",
-                "password": "work@dev"
+                "password": "dev"
             }
         ]
     },

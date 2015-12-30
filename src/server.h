@@ -109,6 +109,10 @@ typedef struct _mysql_config_t
     char   dbname[CONF_BUF_LEN];
     char   username[CONF_BUF_LEN];
     char   password[CONF_BUF_LEN];
+
+    /** 连接池的 dns url*/
+    URL_T            url;
+    ConnectionPool_T pool;
 } mysql_config_t;
 
 // redis 节点
@@ -153,8 +157,6 @@ typedef struct _server_config_t
 /** 全局变量 */
 extern server_config_t   g_conf;
 extern zlog_category_t  *g_zc;
-extern ConnectionPool_T  mysql_master_pool;
-extern ConnectionPool_T *mysql_slaves_pool;
 
 // redis 不需要链接池
 #endif
