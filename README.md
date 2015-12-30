@@ -27,3 +27,12 @@ $ sudo make install
 $ cd /usr/local/include/zdb
 $ sudo cp * ../
 ```
+
+# 注意事项
+
+新 clone 的项目请依次执行以下的命令:
+
+```
+$ git submodule init
+$ git submodule update
+```
