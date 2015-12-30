@@ -356,19 +356,35 @@ init_global()
 
     zlog_debug(g_zc, "日志库初始化成功");
 
-    // 初始化数据库链接池
+    // 初始化数据库[主库]连接池
     char url_buf[CONF_BUF_LEN];
     snprintf(url_buf, CONF_BUF_LEN, "mysql://%s:%d/%s?user=%s&password=%s",
             g_conf.mysql_master.host, g_conf.mysql_master.port,
             g_conf.mysql_master.dbname, g_conf.mysql_master.username,
             g_conf.mysql_master.password);
-    logprintf("mysql.master.dns-url: %s", url_buf);
+    logprintf("mysql.master.dsn-url: %s", url_buf);
 
     g_conf.mysql_master.url  = URL_new(url_buf);
     g_conf.mysql_master.pool = ConnectionPool_new(g_conf.mysql_master.url);
     ConnectionPool_start(g_conf.mysql_master.pool);
 
-    zlog_debug(g_zc, "数据库连接池初始化成功");
+    zlog_debug(g_zc, "数据库主库连接池初始化成功");
+
+    // 初始化从库连接池
+    int i;
+    for (i = 0; i < g_conf.mysql_slaves_count; i++) {
+        snprintf(url_buf, CONF_BUF_LEN, "mysql://%s:%d/%s?user=%s&password=%s",
+                g_conf.mysql_slaves_array[i].host, g_conf.mysql_slaves_array[i].port,
+                g_conf.mysql_slaves_array[i].dbname, g_conf.mysql_slaves_array[i].username,
+                g_conf.mysql_slaves_array[i].password);
+        logprintf("mysql.slaves[%d].dsn-url: %s", i, url_buf);
+
+        g_conf.mysql_slaves_array[i].url  = URL_new(url_buf);
+        g_conf.mysql_slaves_array[i].pool = ConnectionPool_new(g_conf.mysql_slaves_array[i].url);
+        ConnectionPool_start(g_conf.mysql_slaves_array[i].pool);
+
+        zlog_debug(g_zc, "从库 %d 连接池初始化成功", i);
+    }
 }
 
 void init()
