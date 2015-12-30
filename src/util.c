@@ -118,6 +118,8 @@ set_json_header(evhtp_request_t *req)
 {
     evhtp_headers_add_header(req->headers_out,
         evhtp_header_new("Content-Type", "application/json; charset=UTF-8", 0, 0));
+    evhtp_headers_add_header(req->headers_out,
+        evhtp_header_new("Runtime-Enviroment", g_conf.env, 0, 0));
 }
 
 g_error_code_e

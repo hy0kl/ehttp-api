@@ -40,8 +40,7 @@ account_demo(evhtp_request_t *req, void *arg)
     {
         ResultSet_T result = Connection_executeQuery(db,
             "SELECT id, nickname, mobile, email FROM demo");
-        while (ResultSet_next(result))
-        {
+        while (ResultSet_next(result)) {
             cJSON *obj = cJSON_CreateObject();
             cJSON_AddItemToArray(array, obj);
 
