@@ -8,6 +8,7 @@
  * */
 #include "util.h"
 #include "init.h"
+#include "setproctitle.h"
 
 /** 业务逻辑 */
 #include "account/demo.h"
@@ -24,6 +25,15 @@ int main(int argc, char *argv[])
     init();
     // 日志库开启了
     zlog_info(g_zc, "工作环境初始化成功, Let's work.");
+
+    /** 设置工作进程 title,有利于控制程序部署切换 */
+    char prog[CONF_BUF_LEN];
+    char *p = argv[0];
+    if ('.' == p[0]) { p += 2;}
+    snprintf(prog, CONF_BUF_LEN, "%s:%u %s", p, g_conf.port, argv[0]);
+    logprintf("prog-title: %s", prog);
+    initproctitle(argc, argv);
+    setproctitle(prog, "work");
 
     uint64_t max_keepalives = 60;
     evbase_t * evbase = event_base_new();
