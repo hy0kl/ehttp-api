@@ -4,8 +4,16 @@
 
 #set -x
 
+server_conf="conf/server.json"
+if [[ ! -f "$server_conf" ]]
+then
+    echo "Can NOT find $server_conf"
+    echo "Please see README.md and fix it."
+    exit -1
+fi
+
 bin_name="api-server"
-server_port=`grep port conf/server.json | head -n 1 | awk '{split($2, cntr, ","); print cntr[1]}'`
+server_port=`grep port $server_conf | head -n 1 | awk '{split($2, cntr, ","); print cntr[1]}'`
 prog="$bin_name:$server_port"
 #echo $prog
 

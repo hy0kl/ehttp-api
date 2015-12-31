@@ -5,6 +5,7 @@
  * TODO
  * 1. 一期不使用内存池,先出一版看效果
  * 2. redis storage 应该也配置成主从,先不实现.
+ * 3. 信号安装.
  * */
 #include "util.h"
 #include "init.h"
