@@ -42,6 +42,8 @@
 */
 #define _DEBUG_         1
 
+#define SERVER_NAME     "evapi/0.0.1"
+
 #if (_DEBUG_) /** { */
 #define logprintf(format, arg...) fprintf(stderr, "[DEBUG]%s:%d:%s "format"\n", __FILE__, __LINE__, __func__, ##arg)
 #else /** } {*/
