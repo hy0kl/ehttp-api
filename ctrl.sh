@@ -29,7 +29,7 @@ case "$1" in
     start)
         if ((work_pid > 0))
         then
-            echo "$prog is working..."
+            echo "$prog is working... pid: $work_pid"
             exit 1
         else
             cmd="./$bin_name"
@@ -44,7 +44,7 @@ case "$1" in
             kill -9 "$work_pid"
             echo "stop $prog success, pid: $work_pid"
         else
-            echo "Can find $bin_name, please check it out."
+            echo "Can find $prog, please check it out."
         fi
     ;;
 
@@ -58,7 +58,7 @@ case "$1" in
         then
             echo "$prog is working, pid: $work_pid"
         else
-            echo "$bin_name is not working..."
+            echo "$prog is not working..."
         fi
     ;;
 
