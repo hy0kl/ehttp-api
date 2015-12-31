@@ -171,5 +171,7 @@ typedef struct _server_config_t
 extern server_config_t   g_conf;
 extern zlog_category_t  *g_zc;
 
+extern char  **os_argv;
+
 // redis 不需要链接池
 #endif

@@ -10,65 +10,87 @@
 
 #include "setproctitle.h"
 
-#ifndef SPT_BUFSIZE
-# define SPT_BUFSIZE     2048
-#endif
+/*
+ * To change the process title in Linux and Solaris we have to set argv[1]
+ * to NULL and to copy the title to the same place where the argv[0] points to.
+ * However, argv[0] may be too small to hold a new title.  Fortunately, Linux
+ * and Solaris store argv[] and environ[] one after another.  So we should
+ * ensure that is the continuous memory and then we allocate the new memory
+ * for environ[] and copy it.  After this we could use the memory starting
+ * from argv[0] for our process title.
+ *
+ * The Solaris's standard /bin/ps does not show the changed process title.
+ * You have to use "/usr/ucb/ps -w" instead.  Besides, the UCB ps does not
+ * show a new title if its length less than the origin command line length.
+ * To avoid it we append to a new title the origin command line in the
+ * parenthesis.
+ */
 
 extern char **environ;
 
-static char **argv0;
-static int argv_lth;
+static char *os_argv_last;
 
-void initproctitle (int argc, char **argv)
+int
+init_setproctitle(int argc, char **argv)
 {
-	int i;
-	char **envp = environ;
+    char      *p;
+    size_t       size;
+    int        i;
 
-	/*
-	 * Move the environment so we can reuse the memory.
-	 * (Code borrowed from sendmail.)
-	 * WARNING: ugly assumptions on memory layout here;
-	 *          if this ever causes problems, #undef DO_PS_FIDDLING
-	 */
-	for (i = 0; envp[i] != NULL; i++)
-		continue;
+    size = 0;
 
-	environ = (char **) malloc(sizeof(char *) * (i + 1));
-	if (environ == NULL)
-		return;
+    for (i = 0; environ[i]; i++) {
+        size += strlen(environ[i]) + 1;
+    }
 
-	for (i = 0; envp[i] != NULL; i++)
-		if ((environ[i] = strdup(envp[i])) == NULL)
-			return;
-	environ[i] = NULL;
+    p = (char *)malloc(size);
+    if (p == NULL) {
+        return -1;
+    }
 
-	argv0 = argv;
-	if (i > 0)
-		argv_lth = envp[i-1] + strlen(envp[i-1]) - argv0[0];
-	else
-		argv_lth = argv0[argc-1] + strlen(argv0[argc-1]) - argv0[0];
+    os_argv_last = argv[0];
+
+    for (i = 0; argv[i]; i++) {
+        if (os_argv_last == argv[i]) {
+            os_argv_last = argv[i] + strlen(argv[i]) + 1;
+        }
+    }
+
+    for (i = 0; environ[i]; i++) {
+        if (os_argv_last == environ[i]) {
+
+            size = strlen(environ[i]) + 1;
+            os_argv_last = environ[i] + size;
+
+            strncpy(p, (char *) environ[i], size);
+            environ[i] = (char *) p;
+            p += size;
+        }
+    }
+
+    os_argv_last--;
+
+    return 0;
 }
 
-void setproctitle (const char *prog, const char *txt)
+
+void
+setproctitle(char *title)
 {
-        int i;
-        char buf[SPT_BUFSIZE];
+    char     *p;
 
-        if (!argv0)
-                return;
+    os_argv[1] = NULL;
 
-	if (strlen(prog) + strlen(txt) + 5 > SPT_BUFSIZE)
-		return;
+    p = strncpy((char *)os_argv[0], title,
+            os_argv_last - os_argv[0]);
+    zlog_debug(g_zc, "title: %s", p);
 
-	sprintf(buf, "%s -- %s", prog, txt);
+    size_t title_len = strlen(p);
+    p += title_len;
 
-        i = strlen(buf);
-        if (i > argv_lth - 2) {
-                i = argv_lth - 2;
-                buf[i] = '\0';
-        }
-	memset(argv0[0], '\0', argv_lth);       /* clear the memory area */
-        strcpy(argv0[0], buf);
+    if (os_argv_last -  (char *) p) {
+        memset(p, 0, os_argv_last -  (char *) p);
+    }
 
-        argv0[1] = NULL;
+    zlog_debug(g_zc, "setproctitle: %s", os_argv[0]);
 }

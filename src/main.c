@@ -18,8 +18,11 @@
 server_config_t   g_conf;
 zlog_category_t  *g_zc;
 
+char  **os_argv;
+
 int main(int argc, char *argv[])
 {
+    os_argv = (char **)argv;
     // 随机数播种
     srand((unsigned)time(NULL));
 
@@ -33,8 +36,8 @@ int main(int argc, char *argv[])
     if ('.' == p[0]) { p += 2;}
     snprintf(prog, CONF_BUF_LEN, "%s:%u %s", p, g_conf.port, argv[0]);
     logprintf("prog-title: %s", prog);
-    initproctitle(argc, argv);
-    setproctitle(prog, "work");
+    init_setproctitle(argc, argv);
+    setproctitle(prog);
 
     uint64_t max_keepalives = 60;
     evbase_t * evbase = event_base_new();
