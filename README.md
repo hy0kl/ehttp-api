@@ -14,7 +14,7 @@ http libevent api service
 
 ## 以下不需要安装
 - cJSON https://github.com/kbranigan/cJSON http://cjson.sourceforge.net/
-- util-linux https://github.com/karelzak/util-linux
+- nginx 的部分源码
 
 # install guide
 
