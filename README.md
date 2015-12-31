@@ -11,6 +11,7 @@ http libevent api service
 - libzdb https://github.com/mverbert/libzdb http://www.tildeslash.com/libzdb
 - zlog http://hardysimpson.github.com/zlog/
 - util-linux https://github.com/karelzak/util-linux
+- TCMalloc https://github.com/gperftools/gperftools
 
 # install guide
 
