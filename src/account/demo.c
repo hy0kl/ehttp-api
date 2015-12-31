@@ -19,6 +19,9 @@ CREATE TABLE IF NOT EXISTS `demo` (
 void
 account_demo(evhtp_request_t *req, void *arg)
 {
+    struct timeval start_tv;
+    gettimeofday(&start_tv, NULL);
+
     log_uri(req);
     set_json_header(req);
 
@@ -76,6 +79,10 @@ account_demo(evhtp_request_t *req, void *arg)
     if (root_json) { cJSON_Delete(root_json); }
 
     evhtp_send_reply(req, EVHTP_RES_OK);
+
+    struct timeval end_tv;
+    gettimeofday(&end_tv, NULL);
+    zlog_debug(g_zc, "响应时间: %ld微秒", GETUTIME(end_tv) - GETUTIME(start_tv));
 }
 /* vim:set ft=c ts=4 sw=4 et fdm=marker: */
 

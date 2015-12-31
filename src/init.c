@@ -339,6 +339,9 @@ static void
 init_global()
 {
     logprintf("init global");
+
+    gettimeofday(&g_conf.start_tv, NULL);
+
     // 初始化日志库
     int rc;
     rc = zlog_init(g_conf.zlog_conf);

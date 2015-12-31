@@ -145,6 +145,8 @@ typedef struct _curl_config_t
 
 typedef struct _server_config_t
 {
+    struct timeval start_tv;
+
     char  env[SMALL_BUF_LEN];
     char  ip[CONF_BUF_LEN];
     u_int port;
