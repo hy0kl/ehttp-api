@@ -47,3 +47,11 @@ $ sudo cp * ../
 $ git submodule init
 $ git submodule update
 ```
+
+***需要参考 conf 目录中 *.sample.conf 配置生成开发或线上环境服务配置文件.***
+
+```
+$ cp conf/server.sample.json conf/server.json
+$ cp conf/zlog.sample.conf conf/zlog.conf
+将配置文件中修改为真实可用的资源.
+```
