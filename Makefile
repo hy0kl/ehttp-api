@@ -5,7 +5,8 @@ DEPEND_LIB = -lcurl \
 		 -lzlog \
 		 -lpthread \
 		 -lm \
-		 -lhiredis
+		 -lhiredis \
+		 -ltcmalloc
 
 INCLUDEDIR = -I src/ \
 			 -I src/account/ \
