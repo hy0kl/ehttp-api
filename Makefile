@@ -8,14 +8,15 @@ DEPEND_LIB = -lcurl \
 		 -lhiredis
 
 INCLUDEDIR = -I src/ \
-			 -I contrib/cjson
+			 -I src/account/ \
+			 -I contrib/cjson/
 
 CC = cc
 CFLAGS = -g -Wall -Winline -pipe -fPIC
 
 TARGET = api-server
 OBJS = src/main.o src/util.o src/init.o \
-	   src/account_demo.o \
+	   src/account/demo.o \
 	   contrib/cjson/cJSON.o
 
 .PHONY: all clean
