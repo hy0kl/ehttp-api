@@ -110,6 +110,21 @@ typedef enum _g_error_code_e
     LOST_CURL_CONFIG,
 } g_error_code_e;
 
+/** 参数过滤相关 */
+typedef enum _request_parameter_type_e
+{
+    REQ_PARAM_INT = 0, // long
+    REQ_PARAM_STRING,
+    REQ_PARAM_BOOL,
+} req_param_type_e;
+
+typedef struct _request_parameter_filter_t
+{
+    char *param;
+    int   required; /** 是否是必须的 */
+    req_param_type_e type;  /** 参数的类型 */
+} req_param_filter_t;
+
 /** 全局配置*/
 typedef unsigned int u_int;
 // mysql 节点
