@@ -27,8 +27,7 @@ account_demo(evhtp_request_t *req, void *arg)
 
     cJSON *root_json = cJSON_CreateObject();
 
-    cJSON_AddNumberToObject(root_json, RES_CODE, API_OK);
-    cJSON_AddStringToObject(root_json, RES_MSG, get_message(API_OK));
+    build_base_json(root_json, API_OK);
 
     cJSON *data = cJSON_CreateObject();
     cJSON_AddItemToObject(root_json, RES_DATA, data);

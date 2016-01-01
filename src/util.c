@@ -142,6 +142,19 @@ get_slave_db_link(Connection_T *db_link)
     return API_OK;
 }
 
+
+void
+build_base_json(cJSON *root_json, g_error_code_e code)
+{
+    assert(NULL != root_json);
+    assert(cJSON_Object == root_json->type);
+
+    cJSON_AddNumberToObject(root_json, RES_CODE, code);
+    cJSON_AddStringToObject(root_json, RES_MSG, get_message(code));
+
+    return;
+}
+
 void
 default_router(evhtp_request_t *req, void *arg)
 {

@@ -27,6 +27,9 @@ void set_json_header(evhtp_request_t *req);
 /** 打印 access 日志 */
 void log_uri(evhtp_request_t *req);
 
+/** 构造 base json 对象的结构 */
+void build_base_json(cJSON *root_json, g_error_code_e code);
+
 /** 默认路由 */
 void default_router(evhtp_request_t *req, void *arg);
 
