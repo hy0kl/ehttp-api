@@ -22,16 +22,13 @@ g_error_code_e
 get_slave_db_link(Connection_T *db_link);
 
 /** 设置 json 头 */
-void
-set_json_header(evhtp_request_t *req);
+void set_json_header(evhtp_request_t *req);
 
 /** 打印 access 日志 */
-void
-log_uri(evhtp_request_t *req);
+void log_uri(evhtp_request_t *req);
 
 /** 默认路由 */
-void
-default_router(evhtp_request_t *req, void *arg);
+void default_router(evhtp_request_t *req, void *arg);
 
 void clean(void);
 #endif

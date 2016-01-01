@@ -5,7 +5,6 @@
 #include "util.h"
 
 /** 初始化 */
-void
-init();
+void init();
 
 #endif

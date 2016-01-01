@@ -4,7 +4,6 @@
 #include "../server.h"
 #include "../util.h"
 
-void
-account_demo(evhtp_request_t *req, void *arg);
+void account_demo(evhtp_request_t *req, void *arg);
 
 #endif
