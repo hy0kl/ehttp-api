@@ -361,7 +361,7 @@ init_global()
 
     // 初始化数据库[主库]连接池
     char url_buf[CONF_BUF_LEN];
-    snprintf(url_buf, CONF_BUF_LEN, "mysql://%s:%d/%s?user=%s&password=%s",
+    snprintf(url_buf, CONF_BUF_LEN, "mysql://%s:%d/%s?user=%s&password=%s&charset=utf8",
             g_conf.mysql_master.host, g_conf.mysql_master.port,
             g_conf.mysql_master.dbname, g_conf.mysql_master.username,
             g_conf.mysql_master.password);
@@ -376,7 +376,7 @@ init_global()
     // 初始化从库连接池
     int i;
     for (i = 0; i < g_conf.mysql_slaves_count; i++) {
-        snprintf(url_buf, CONF_BUF_LEN, "mysql://%s:%d/%s?user=%s&password=%s",
+        snprintf(url_buf, CONF_BUF_LEN, "mysql://%s:%d/%s?user=%s&password=%s&charset=utf8",
                 g_conf.mysql_slaves_array[i].host, g_conf.mysql_slaves_array[i].port,
                 g_conf.mysql_slaves_array[i].dbname, g_conf.mysql_slaves_array[i].username,
                 g_conf.mysql_slaves_array[i].password);
