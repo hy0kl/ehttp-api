@@ -62,8 +62,21 @@ case "$1" in
         fi
     ;;
 
+    rebuild)
+        git pull origin master
+        $0 stop
+        make && $0 start
+        ret=$?
+        if ((0 == ret))
+        then
+            echo "rebuild success"
+        else
+            echo "rebuild fail..."
+        fi
+    ;;
+
     *)
-        echo "Usage: $0 {start|stop|restart|status}"
+        echo "Usage: $0 {start|stop|restart|status|rebuild}"
         exit 11
     ;;
 esac
