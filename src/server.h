@@ -108,6 +108,9 @@ typedef enum _g_error_code_e
     LOST_REDIS_CACHE_HOST,
 
     LOST_CURL_CONFIG,
+
+    // 业务层的通用错误码
+    API_DOES_NOT_EXIST = 500100,
 } g_error_code_e;
 
 /** 参数过滤相关 */

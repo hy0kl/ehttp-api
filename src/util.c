@@ -97,6 +97,10 @@ get_message(g_error_code_e code)
             msg = "Lost curl config node.";
             break;
 
+        case API_DOES_NOT_EXIST:
+            msg = "Request interface does not exist.";
+            break;
+
         default:
             msg = "unreachable";
     }
@@ -142,7 +146,6 @@ get_slave_db_link(Connection_T *db_link)
     return API_OK;
 }
 
-
 void
 build_base_json(cJSON *root_json, g_error_code_e code)
 {
@@ -159,9 +162,21 @@ void
 default_router(evhtp_request_t *req, void *arg)
 {
     log_uri(req);
-    const char *json = "{\"code\":0,\"message\":\"请求接口不存在\"}";
-    evbuffer_add(req->buffer_out, json, strlen(json));
+
     set_json_header(req);
+
+    cJSON *root_json = cJSON_CreateObject();
+    build_base_json(root_json, API_DOES_NOT_EXIST);
+    cJSON *data = cJSON_CreateObject();
+    cJSON_AddItemToObject(root_json, "data", data);
+
+    char *json = cJSON_PrintUnformatted(root_json);
+    evbuffer_add(req->buffer_out, json, strlen(json));
+
+    // 清除内存
+    if (json) { free(json); }
+    if (root_json) { cJSON_Delete(root_json); }
+
     evhtp_send_reply(req, EVHTP_RES_OK);
 }
 
