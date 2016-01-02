@@ -60,3 +60,13 @@ $ cp conf/server.sample.json conf/server.json
 $ cp conf/zlog.sample.conf conf/zlog.conf
 将配置文件中修改为真实可用的资源.
 ```
+
+# Q&A
+
+## Mac 下报错: `dyld: Library not loaded: libmysqlclient.18.dylib`
+
+```
+参考方法:
+$ sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/local/lib/libmysqlclient.18.dylib
+```
+
