@@ -51,14 +51,14 @@ testcb(evhtp_request_t *req, void * a)
     evhtp_kvs_for_each(req->uri->query, dump_kv, dump_buf);
     evbuffer_add_printf(req->buffer_out, "\nQUERY: ---\n");
     evbuffer_add(req->buffer_out, dump_buf, strlen(dump_buf));
-    evbuffer_add_printf(req->buffer_out, "---END--\n");
+    evbuffer_add_printf(req->buffer_out, "---END---\n");
 
     dump_buf[0] = '\0';
 
     evhtp_kvs_for_each(req->headers_in, dump_kv, dump_buf);
-    evbuffer_add_printf(req->buffer_out, "\nHTTP Header: ---\n");
+    evbuffer_add_printf(req->buffer_out, "HTTP Header: ---\n");
     evbuffer_add(req->buffer_out, dump_buf, strlen(dump_buf));
-    evbuffer_add_printf(req->buffer_out, "---END--\n");
+    evbuffer_add_printf(req->buffer_out, "---END---\n");
 
     evbuffer_add(req->buffer_out, str, strlen(str));
     evhtp_send_reply(req, EVHTP_RES_OK);
