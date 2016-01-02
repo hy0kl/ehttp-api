@@ -9,6 +9,11 @@
 
 #include "server.h"
 
+#define SIGNO_END   111
+
+/** 安装信号 */
+void signal_setup(void);
+
 /** 全局的 code message */
 const char *
 get_message(g_error_code_e code);

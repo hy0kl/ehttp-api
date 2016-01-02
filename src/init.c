@@ -394,5 +394,6 @@ void init()
 {
     parse_server_config();
     init_global();
+    signal_setup();
 }
 
