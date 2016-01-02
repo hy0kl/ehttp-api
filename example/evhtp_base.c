@@ -5,6 +5,18 @@
 #include <errno.h>
 #include <evhtp.h>
 
+#define DUMP_BUF_LEN 2048
+
+static int
+dump_kv(evhtp_kv_t * kv, void * arg)
+{
+    char * buf = (char *)arg;
+    int len = strlen(buf);
+    len += snprintf(buf + len, DUMP_BUF_LEN - len, "%s:%s\n", kv->key, kv->val);
+    buf[len] = '\0';
+    return 0;
+}
+
 void
 testcb(evhtp_request_t *req, void * a)
 {
@@ -32,6 +44,21 @@ testcb(evhtp_request_t *req, void * a)
         evbuffer_add(req->buffer_out, "POST-DATA: ", sizeof("POST-DATA: ") - 1);
         evbuffer_add(req->buffer_out, post_buf, content_len);
     }
+
+    char dump_buf[DUMP_BUF_LEN];
+    dump_buf[0] = '\0';
+
+    evhtp_kvs_for_each(req->uri->query, dump_kv, dump_buf);
+    evbuffer_add_printf(req->buffer_out, "\nQUERY: ---\n");
+    evbuffer_add(req->buffer_out, dump_buf, strlen(dump_buf));
+    evbuffer_add_printf(req->buffer_out, "---END--\n");
+
+    dump_buf[0] = '\0';
+
+    evhtp_kvs_for_each(req->headers_in, dump_kv, dump_buf);
+    evbuffer_add_printf(req->buffer_out, "\nHTTP Header: ---\n");
+    evbuffer_add(req->buffer_out, dump_buf, strlen(dump_buf));
+    evbuffer_add_printf(req->buffer_out, "---END--\n");
 
     evbuffer_add(req->buffer_out, str, strlen(str));
     evhtp_send_reply(req, EVHTP_RES_OK);
@@ -66,7 +93,7 @@ main(int argc, char ** argv) {
     //evhtp_set_parser_flags(htp, EVHTP_PARSE_QUERY_FLAG_LENIENT);
     evhtp_set_max_keepalive_requests(htp, max_keepalives);
 
-    evhtp_set_cb(htp, "/simple/", testcb, "simple");
+    evhtp_set_cb(htp, "/simple/", testcb, "simple\n");
     evhtp_set_cb(htp, "/1/ping", testcb, "one");
     evhtp_set_cb(htp, "/1/ping.json", testcb, "two");
     evhtp_set_cb(htp, "/", root, NULL);
