@@ -38,6 +38,10 @@ void build_base_json(cJSON *root_json, g_error_code_e code);
 /** 默认路由 */
 void default_router(evhtp_request_t *req, void *arg);
 
+/** 取得原始的 POST 数据 */
+g_error_code_e
+get_post_data_raw(evhtp_request_t *req, char *buf, size_t buf_len);
+
 void clean(void);
 #endif
 

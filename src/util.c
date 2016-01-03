@@ -3,7 +3,8 @@
 static void
 handler(int signo)
 {
-    fprintf(stderr, "Get one signal: %d. man sigaction.\n", signo);
+    //fprintf(stderr, "Get one signal: %d. man sigaction.\n", signo);
+    zlog_info(g_zc, "Get one signal: %d. man sigaction.", signo);
     return;
 }
 
@@ -162,6 +163,14 @@ get_message(g_error_code_e code)
             msg = "Request interface does not exist.";
             break;
 
+        case REQUEST_METHOD_DOES_NOT_MATCH:
+            msg = "Request method does not match.";
+            break;
+
+        case DATA_STRUCTURE_TYPE_DOES_NOT_MATCH:
+            msg = "Data structure type does not match.";
+            break;
+
         default:
             msg = "unreachable";
     }
@@ -239,6 +248,22 @@ default_router(evhtp_request_t *req, void *arg)
     if (root_json) { cJSON_Delete(root_json); }
 
     evhtp_send_reply(req, EVHTP_RES_OK);
+}
+
+g_error_code_e
+get_post_data_raw(evhtp_request_t *req, char *buf, size_t buf_len)
+{
+    assert(NULL != req);
+    assert(NULL != buf);
+
+    if (htp_method_POST != htparser_get_method(req->conn->parser)) { return REQUEST_METHOD_DOES_NOT_MATCH; };
+
+    size_t content_len = evhtp_request_content_len(req);
+    size_t real_size   = content_len >= buf_len ? buf_len  - 1 : content_len;
+    evbuffer_copyout(req->buffer_in, buf, real_size);
+    buf[real_size] = '\0';
+
+    return API_OK;
 }
 
 void

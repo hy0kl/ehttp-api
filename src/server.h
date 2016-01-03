@@ -111,6 +111,8 @@ typedef enum _g_error_code_e
 
     // 业务层的通用错误码
     API_DOES_NOT_EXIST = 500100,
+    REQUEST_METHOD_DOES_NOT_MATCH,
+    DATA_STRUCTURE_TYPE_DOES_NOT_MATCH,
 } g_error_code_e;
 
 /** 参数过滤相关 */
