@@ -29,6 +29,7 @@ account_demo(evhtp_request_t *req, void *arg)
     /** 处理请求参数 */
     req_param_filter_t req_filter_conf[] = {
         {"version", REQUIRED_NO, REQ_PARAM_STRING},
+        {"id", REQUIRED_NO, REQ_PARAM_INT},
         REQ_PARAM_FILTER_PAD,
     };
     cJSON *req_filter_data = cJSON_CreateObject();
