@@ -37,9 +37,7 @@ account_demo(evhtp_request_t *req, void *arg)
     /** 响应体 json 对象 */
     cJSON *root_json = cJSON_CreateObject();
 
-    cJSON *data = cJSON_CreateObject();
-    cJSON_AddItemToObject(root_json, RES_DATA, data);
-
+    cJSON *data  = cJSON_CreateObject();
     cJSON *array = cJSON_CreateArray();
     cJSON_AddItemToObject(data, "demo_data", array);
 
@@ -77,8 +75,9 @@ account_demo(evhtp_request_t *req, void *arg)
     }
     END_TRY;
 
-    /** 创建基本包体 */
+    /** 构建基本包体 */
     build_base_json(root_json, ret_code);
+    cJSON_AddItemToObject(root_json, RES_DATA, data);
 
     //char *json = cJSON_Print(root_json);
     char *json = cJSON_PrintUnformatted(root_json);
