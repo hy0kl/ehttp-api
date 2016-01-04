@@ -70,3 +70,16 @@ $ cp conf/zlog.sample.conf conf/zlog.conf
 $ sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/local/lib/libmysqlclient.18.dylib
 ```
 
+## bigint 如何处理?
+
+传输出层采用字符串,业务使用的时候转成数字.
+
+```
+#include <stdlib.h>
+
+unsigned long
+strtoul(const char *restrict str, char **restrict endptr, int base);
+
+unsigned long long
+strtoull(const char *restrict str, char **restrict endptr, int base);
+```

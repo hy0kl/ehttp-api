@@ -117,8 +117,11 @@ typedef enum _g_error_code_e
     SERVICE_UNAVAILABLE,
 } g_error_code_e;
 
+typedef unsigned int        u_int;
+typedef long int            bigint;
+typedef unsigned long int   u_bigint;
+
 /** 全局配置*/
-typedef unsigned int u_int;
 
 // mysql 节点
 typedef struct _mysql_config_t
