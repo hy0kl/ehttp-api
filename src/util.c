@@ -181,10 +181,14 @@ get_message(g_error_code_e code)
 void
 log_uri(evhtp_request_t *req)
 {
-    zlog_info(g_zc, "uri: %s%s%s",
+    htp_method method = htparser_get_method(req->conn->parser);
+
+    zlog_info(g_zc, "%s \"%s %s%s%s\"",
+            "", // ip 占位
+            htparser_get_methodstr_m(method), // HTTP_METHOD
             req->uri->path->full,
-            req->uri->query_raw ? "?" : "",
-            req->uri->query_raw ? (char *)req->uri->query_raw : "");
+            req->uri->query_raw && htp_method_GET == method ? "?" : "",
+            req->uri->query_raw && htp_method_GET == method ? (char *)req->uri->query_raw : "");
 }
 
 void
