@@ -329,7 +329,7 @@ filter_request_parameters(
         }
     }
 
-#if _DEBUG_
+#if (_DEBUG_)
     char *json = cJSON_PrintUnformatted(json_obj);
     zlog_debug(g_zc, "[%s] JSON: %s", __func__, json);
     if (json) { free(json); }
