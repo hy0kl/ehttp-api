@@ -175,6 +175,10 @@ get_message(const g_error_code_e code)
             msg = "Missing required parameters.";
             break;
 
+        case SERVICE_UNAVAILABLE:
+            msg = "Back-end service is unavailable.";
+            break;
+
         default:
             msg = "unreachable";
     }

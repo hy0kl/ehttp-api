@@ -114,6 +114,7 @@ typedef enum _g_error_code_e
     REQUEST_METHOD_DOES_NOT_MATCH,
     DATA_STRUCTURE_TYPE_DOES_NOT_MATCH,
     MISSING_REQUIRED_PARAMETERS,
+    SERVICE_UNAVAILABLE,
 } g_error_code_e;
 
 /** 全局配置*/

@@ -43,38 +43,42 @@ account_demo(evhtp_request_t *req, void *arg)
     cJSON_AddItemToObject(data, "demo_data", array);
 
     Connection_T db;
-    get_slave_db_link(&db);
+    do {
+        ret_code = get_slave_db_link(&db);
+        if (API_OK != ret_code) { break; }
 
-    TRY
-    {
-        ResultSet_T result = Connection_executeQuery(db,
-            "SELECT id, nickname, mobile, email FROM demo");
-        while (ResultSet_next(result)) {
-            cJSON *obj = cJSON_CreateObject();
-            cJSON_AddItemToArray(array, obj);
+        TRY
+        {
+            ResultSet_T result = Connection_executeQuery(db,
+                "SELECT id, nickname, mobile, email FROM demo");
+            while (ResultSet_next(result)) {
+                cJSON *obj = cJSON_CreateObject();
+                cJSON_AddItemToArray(array, obj);
 
-            int id = ResultSet_getIntByName(result, "id");
-            cJSON_AddNumberToObject(obj, "id", id);
+                int id = ResultSet_getIntByName(result, "id");
+                cJSON_AddNumberToObject(obj, "id", id);
 
-            const char *nickname = ResultSet_getStringByName(result, "nickname");
-            cJSON_AddStringToObject(obj, "nickname", nickname);
+                const char *nickname = ResultSet_getStringByName(result, "nickname");
+                cJSON_AddStringToObject(obj, "nickname", nickname);
 
-            const char *mobile = ResultSet_getStringByName(result, "mobile");
-            cJSON_AddStringToObject(obj, "mobile", mobile);
+                const char *mobile = ResultSet_getStringByName(result, "mobile");
+                cJSON_AddStringToObject(obj, "mobile", mobile);
 
-            const char *email = ResultSet_getStringByName(result, "email");
-            cJSON_AddStringToObject(obj, "email", email);
+                const char *email = ResultSet_getStringByName(result, "email");
+                cJSON_AddStringToObject(obj, "email", email);
+            }
         }
-    }
-    CATCH(SQLException)
-    {
-        zlog_error(g_zc, "SQLException -- %s\n", Exception_frame.message);
-    }
-    FINALLY
-    {
-        Connection_close(db);
-    }
-    END_TRY;
+        CATCH(SQLException)
+        {
+            ret_code = SERVICE_UNAVAILABLE;
+            zlog_error(g_zc, "SQLException -- %s\n", Exception_frame.message);
+        }
+        FINALLY
+        {
+            Connection_close(db);
+        }
+        END_TRY;
+    } while(0);
 
     /** 构建基本包体 */
     build_base_json(root_json, ret_code);
