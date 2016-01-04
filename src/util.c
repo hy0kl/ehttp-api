@@ -281,6 +281,9 @@ get_post_data_raw(const evhtp_request_t *req, char *buf, size_t buf_len)
 void
 clean(void)
 {
+    /* we're done with libcurl, so clean it up */
+    curl_global_cleanup();
+
     // 销毁数据库主库连接池
     ConnectionPool_free(&g_conf.mysql_master.pool);
     URL_free(&g_conf.mysql_master.url);
@@ -343,7 +346,7 @@ filter_request_parameters(
 }
 
 curl_buf_t *
-create_curl_buf(size_t buf_len)
+create_curl_buf(const size_t buf_len)
 {
     assert(buf_len > 0);
 

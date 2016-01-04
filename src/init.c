@@ -388,6 +388,9 @@ init_global()
 
         zlog_debug(g_zc, "从库 %d 连接池初始化成功", i);
     }
+
+    /** 全局初始化,非线程安全,请在主进程/线程中执行 */
+    curl_global_init(CURL_GLOBAL_ALL);
 }
 
 void init()

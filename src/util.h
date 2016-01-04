@@ -36,6 +36,9 @@ typedef struct _curl_buf_t
     char  *buf;
     size_t size;    /** 已使用的缓冲区大小 */
     size_t buf_len; /** buf 的长度 */
+
+    CURLcode result_code;   /** curl 执行的返回码 */
+    long     response_code; /** 接口响应的 http code */
 } curl_buf_t;
 
 /** 安装信号 */
@@ -78,7 +81,7 @@ filter_request_parameters(const evhtp_request_t *req, const req_param_filter_t *
 
 /** 创建 curl 工作缓冲区 */
 curl_buf_t *
-create_curl_buf(size_t buf_len);
+create_curl_buf(const size_t buf_len);
 
 /** 释放 curl 的缓冲区 */
 void delete_curl_buf(curl_buf_t *curl_buf);
