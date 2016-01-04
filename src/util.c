@@ -179,6 +179,10 @@ get_message(const g_error_code_e code)
             msg = "Back-end service is unavailable.";
             break;
 
+        case CURL_GET_WRONG:
+            msg = "libcurl get wrong.";
+            break;
+
         default:
             msg = "unreachable";
     }
@@ -365,6 +369,10 @@ create_curl_buf(const size_t buf_len)
 
     curl_buf->size    = 0;
     curl_buf->buf_len = buf_len;
+    curl_buf->buf[0]  = '\0';
+    curl_buf->response_code = 0;
+
+    zlog_debug(g_zc, "create_curl_buf successful.");
 
     return curl_buf;
 }
@@ -372,10 +380,85 @@ create_curl_buf(const size_t buf_len)
 void
 delete_curl_buf(curl_buf_t *curl_buf)
 {
-    if (curl_buf) {
-        if (curl_buf->buf) {
+    if (NULL != curl_buf) {
+        if (NULL != curl_buf->buf) {
             free(curl_buf->buf);
         }
         free(curl_buf);
     }
+}
+
+static size_t
+curl_write_buf_callback(
+        void *contents,
+        size_t size, size_t nmemb,
+        void *userp)
+{
+    size_t realsize = size * nmemb;
+    curl_buf_t *curl_buf = (curl_buf_t *)userp;
+
+    /** 如果缓冲区不够容纳结果,扩充缓冲区 */
+    if (realsize + 1 + curl_buf->size > curl_buf->buf_len) {
+        curl_buf->buf = realloc(curl_buf->buf, curl_buf->size + realsize + 1);
+        if (NULL == curl_buf->buf) {
+            zlog_error(g_zc, "not enough memory (realloc returned NULL)");
+            return 0;
+        }
+
+        curl_buf->buf_len = curl_buf->size + realsize + 1;
+    }
+
+    memcpy(&(curl_buf->buf[curl_buf->size]), contents, realsize);
+    curl_buf->size += realsize;
+    curl_buf->buf[curl_buf->size] = '\0';
+
+    return realsize;
+}
+
+g_error_code_e
+curl_get_api(const char *api, curl_buf_t *curl_buf)
+{
+    assert(NULL != api);
+    assert(NULL != curl_buf);
+    assert(NULL != curl_buf->buf);
+
+    g_error_code_e code = API_OK;
+    CURL *curl_handle;
+
+    /* init the curl session */
+    curl_handle = curl_easy_init();
+    /* specify URL to get */
+    curl_easy_setopt(curl_handle, CURLOPT_URL, api);
+    /* send all data to this function  */
+    curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, curl_write_buf_callback);
+    /* we pass our 'chunk' struct to the callback function */
+    curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)curl_buf);
+    /* some servers don't like requests that are made without a user-agent field, so we provide one */
+    curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+    /* example.com is redirected, so we tell libcurl to follow redirection */
+    curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, 1L);
+    /* complete connection within 100 milliseconds */
+    curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT_MS, g_conf.curl_conf.connect_timeout_ms);
+    /* complete within 300 milliseconds */
+    curl_easy_setopt(curl_handle, CURLOPT_TIMEOUT_MS, g_conf.curl_conf.timeout_ms);
+    /* 防止超时信号挂起 */
+    curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1);
+
+    /* get it! */
+    curl_buf->result_code = curl_easy_perform(curl_handle);
+    if (CURLE_OK != curl_buf->result_code) {
+        code = CURL_GET_WRONG;
+        zlog_error(g_zc, "[%s] curl_easy_perform() failed: %d %s", api,
+                curl_buf->result_code, curl_easy_strerror(curl_buf->result_code));
+        goto FINISH;
+    }
+
+    curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, &(curl_buf->response_code));
+
+FINISH:
+    /* cleanup curl stuff */
+    curl_easy_cleanup(curl_handle);
+    zlog_debug(g_zc, "[api: %s] [response: %s]", api, curl_buf->buf);
+
+    return code;
 }

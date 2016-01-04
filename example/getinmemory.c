@@ -55,7 +55,7 @@ WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp)
             return 0;
         }
 
-        mem->buf_len += realsize + 1;
+        mem->buf_len = mem->size + realsize + 1;
     }
 
     memcpy(&(mem->memory[mem->size]), contents, realsize);

@@ -85,5 +85,9 @@ create_curl_buf(const size_t buf_len);
 
 /** 释放 curl 的缓冲区 */
 void delete_curl_buf(curl_buf_t *curl_buf);
+
+/** 通过 get 方法从接口取数据 */
+g_error_code_e
+curl_get_api(const char *api, curl_buf_t *curl_buf);
 #endif
 

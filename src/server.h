@@ -115,6 +115,7 @@ typedef enum _g_error_code_e
     DATA_STRUCTURE_TYPE_DOES_NOT_MATCH,
     MISSING_REQUIRED_PARAMETERS,
     SERVICE_UNAVAILABLE,
+    CURL_GET_WRONG,
 } g_error_code_e;
 
 typedef unsigned int        u_int;

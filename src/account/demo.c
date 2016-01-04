@@ -87,6 +87,16 @@ account_demo(evhtp_request_t *req, void *arg)
         END_TRY;
     } while(0);
 
+    const char *api = "http://sug.so.360.cn/suggest?callback=suggest_so&encodein=utf-8&encodeout=utf-8&format=json&fields=word,obdata&word=abc";
+    curl_buf_t *curl_buf = create_curl_buf(CURL_CHUNK_BUF_LEN);
+    if (NULL == curl_buf) {
+        ret_code = NEED_MORE_MEMORY;
+        goto FINISH;
+    }
+    ret_code = curl_get_api(api, curl_buf);
+    if (API_OK != ret_code) { goto FINISH; }
+    cJSON_AddStringToObject(data, "api_data", curl_buf->buf);
+
 FINISH:
 
     /** 构建基本包体 */
@@ -98,6 +108,7 @@ FINISH:
     evbuffer_add(req->buffer_out, json, strlen(json));
 
     /** 清除内存 */
+    delete_curl_buf(curl_buf);
     if (json) { free(json); }
     if (root_json) { cJSON_Delete(root_json); }
     if (req_filter_data) { cJSON_Delete(req_filter_data); }
