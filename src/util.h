@@ -31,6 +31,13 @@ typedef struct _request_parameter_filter_t
 
 #define REQ_PARAM_FILTER_PAD    {NULL, REQUIRED_NO, REQ_PARAM_STRING}
 
+typedef struct _curl_buf_t
+{
+    char  *buf;
+    size_t size;    /** 已使用的缓冲区大小 */
+    size_t buf_len; /** buf 的长度 */
+} curl_buf_t;
+
 /** 安装信号 */
 void signal_setup(void);
 
@@ -68,5 +75,12 @@ void clean(void);
 /** 通用过滤客户端请求数据 */
 g_error_code_e
 filter_request_parameters(const evhtp_request_t *req, const req_param_filter_t *filter, cJSON *json_obj);
+
+/** 创建 curl 工作缓冲区 */
+curl_buf_t *
+create_curl_buf(size_t buf_len);
+
+/** 释放 curl 的缓冲区 */
+void delete_curl_buf(curl_buf_t *curl_buf);
 #endif
 

@@ -341,3 +341,38 @@ filter_request_parameters(
 
     return ret_code;
 }
+
+curl_buf_t *
+create_curl_buf(size_t buf_len)
+{
+    assert(buf_len > 0);
+
+    curl_buf_t *curl_buf = (curl_buf_t *)malloc(sizeof(curl_buf_t));
+    if (NULL == curl_buf) {
+        zlog_error(g_zc, "curl_buf %s", get_message(NEED_MORE_MEMORY));
+        return NULL;
+    }
+
+    curl_buf->buf = (char *)malloc(buf_len);
+    if (NULL == curl_buf->buf) {
+        zlog_error(g_zc, "curl_buf->buf %s", get_message(NEED_MORE_MEMORY));
+        free(curl_buf);
+        return NULL;
+    }
+
+    curl_buf->size    = 0;
+    curl_buf->buf_len = buf_len;
+
+    return curl_buf;
+}
+
+void
+delete_curl_buf(curl_buf_t *curl_buf)
+{
+    if (curl_buf) {
+        if (curl_buf->buf) {
+            free(curl_buf->buf);
+        }
+        free(curl_buf);
+    }
+}

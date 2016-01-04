@@ -40,9 +40,31 @@
 | | | | | | (_| | (__| | | (_) |
 |_| |_| |_|\__,_|\___|_|  \___/
 */
-#define _DEBUG_         1
+#define _DEBUG_             1
 
-#define SERVER_NAME     "evapi/0.0.1"
+#define SERVER_NAME         "evapi/0.0.1"
+
+/** 配置项目缓冲区长度 */
+#define CONF_BUF_LEN        128
+/** 文件路径缓冲区长度 */
+#define PATH_BUF_LEN        1024
+
+#define SMALL_BUF_LEN       64
+#define CURL_CHUNK_BUF_LEN  10240
+#define CURL_TIMEOUT        450
+
+#define MYSQL_PORT          3306
+#define REDIS_PORT          6379
+#define REDIS_TIMEOUT       100
+
+/* Port to listen on. */
+#define SERVER_PORT         5678
+#define SERVER_BACKLOG      1024
+
+/** API 响应结构 {"code":0,"message":"OK","data":{}} */
+#define RES_CODE            "code"
+#define RES_MSG             "message"
+#define RES_DATA            "data"
 
 #if (_DEBUG_) /** { */
 #define logprintf(format, arg...) fprintf(stderr, "[DEBUG]%s:%d:%s "format"\n", __FILE__, __LINE__, __func__, ##arg)
@@ -50,31 +72,9 @@
 #define logprintf(format, arg...) {}
 #endif /** } */
 
-/** 配置项目缓冲区长度 */
-#define CONF_BUF_LEN    128
-/** 文件路径缓冲区长度 */
-#define PATH_BUF_LEN    1024
-
-#define SMALL_BUF_LEN       8
-#define CURL_CHUNK_BUF_LEN  10240
-#define CURL_TIMEOUT        450
-
 #define GETUTIME(t) ((t.tv_sec) * 1000000 + (t.tv_usec))
 #define GETSTIME(t) (t.tv_sec)
 #define GETMTIME(t) ((((t.tv_sec) * 1000000 + (t.tv_usec))) / 1000)
-
-#define MYSQL_PORT      3306
-#define REDIS_PORT      6379
-#define REDIS_TIMEOUT   100
-
-/* Port to listen on. */
-#define SERVER_PORT     5678
-#define SERVER_BACKLOG  1024
-
-/** API 响应结构 {"code":0,"message":"OK","data":{}} */
-#define RES_CODE    "code"
-#define RES_MSG     "message"
-#define RES_DATA    "data"
 
 /** 全局状态码/错误码 */
 typedef enum _g_error_code_e
