@@ -113,25 +113,12 @@ typedef enum _g_error_code_e
     API_DOES_NOT_EXIST = 500100,
     REQUEST_METHOD_DOES_NOT_MATCH,
     DATA_STRUCTURE_TYPE_DOES_NOT_MATCH,
+    MISSING_REQUIRED_PARAMETERS,
 } g_error_code_e;
-
-/** 参数过滤相关 */
-typedef enum _request_parameter_type_e
-{
-    REQ_PARAM_INT = 0, // long
-    REQ_PARAM_STRING,
-    REQ_PARAM_BOOL,
-} req_param_type_e;
-
-typedef struct _request_parameter_filter_t
-{
-    char *param;
-    int   required; /** 是否是必须的 */
-    req_param_type_e type;  /** 参数的类型 */
-} req_param_filter_t;
 
 /** 全局配置*/
 typedef unsigned int u_int;
+
 // mysql 节点
 typedef struct _mysql_config_t
 {

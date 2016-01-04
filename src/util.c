@@ -63,7 +63,7 @@ signal_setup(void)
 }
 
 const char *
-get_message(g_error_code_e code)
+get_message(const g_error_code_e code)
 {
     const char *msg = NULL;
     switch (code) {
@@ -171,6 +171,10 @@ get_message(g_error_code_e code)
             msg = "Data structure type does not match.";
             break;
 
+        case MISSING_REQUIRED_PARAMETERS:
+            msg = "Missing required parameters.";
+            break;
+
         default:
             msg = "unreachable";
     }
@@ -179,7 +183,7 @@ get_message(g_error_code_e code)
 }
 
 void
-log_uri(evhtp_request_t *req)
+log_uri(const evhtp_request_t *req)
 {
     htp_method method = htparser_get_method(req->conn->parser);
 
@@ -255,7 +259,7 @@ default_router(evhtp_request_t *req, void *arg)
 }
 
 g_error_code_e
-get_post_data_raw(evhtp_request_t *req, char *buf, size_t buf_len)
+get_post_data_raw(const evhtp_request_t *req, char *buf, size_t buf_len)
 {
     assert(NULL != req);
     assert(NULL != buf);
@@ -287,3 +291,49 @@ clean(void)
     zlog_fini();
 }
 
+g_error_code_e
+filter_request_parameters(
+        const evhtp_request_t *req,
+        const req_param_filter_t *filter,
+        cJSON *json_obj)
+{
+    assert(NULL != req);
+    assert(NULL != filter);
+    assert(NULL != json_obj);
+    assert(cJSON_Object == json_obj->type);
+
+    g_error_code_e ret_code = API_OK;
+
+    const char *value;
+
+    for (; NULL != filter->param; filter++) {
+        value = evhtp_kv_find(req->uri->query, filter->param);
+
+        if (filter->required && NULL == value) {
+            ret_code = MISSING_REQUIRED_PARAMETERS;
+            break;
+        }
+
+        if (NULL == value) {
+            if (REQ_PARAM_STRING == filter->type) {
+                cJSON_AddStringToObject(json_obj, filter->param, "");
+            } else if (REQ_PARAM_INT == filter->type) {
+                cJSON_AddNumberToObject(json_obj, filter->param, 0);
+            }
+        } else {
+            if (REQ_PARAM_STRING == filter->type) {
+                cJSON_AddStringToObject(json_obj, filter->param, value);
+            } else if (REQ_PARAM_INT == filter->type) {
+                cJSON_AddNumberToObject(json_obj, filter->param, atoi(value));
+            }
+        }
+    }
+
+#if _DEBUG_
+    char *json = cJSON_PrintUnformatted(json_obj);
+    zlog_debug(g_zc, "[%s] JSON: %s", __func__, json);
+    if (json) { free(json); }
+#endif
+
+    return ret_code;
+}

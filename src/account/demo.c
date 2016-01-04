@@ -19,15 +19,23 @@ CREATE TABLE IF NOT EXISTS `demo` (
 void
 account_demo(evhtp_request_t *req, void *arg)
 {
+    g_error_code_e ret_code = API_OK;
     struct timeval start_tv;
     gettimeofday(&start_tv, NULL);
 
     log_uri(req);
     set_json_header(req);
 
-    cJSON *root_json = cJSON_CreateObject();
+    /** 处理请求参数 */
+    req_param_filter_t req_filter_conf[] = {
+        {"version", REQUIRED_NO, REQ_PARAM_STRING},
+        REQ_PARAM_FILTER_PAD,
+    };
+    cJSON *req_filter_data = cJSON_CreateObject();
+    ret_code = filter_request_parameters(req, req_filter_conf, req_filter_data);
 
-    build_base_json(root_json, API_OK);
+    /** 响应体 json 对象 */
+    cJSON *root_json = cJSON_CreateObject();
 
     cJSON *data = cJSON_CreateObject();
     cJSON_AddItemToObject(root_json, RES_DATA, data);
@@ -69,6 +77,9 @@ account_demo(evhtp_request_t *req, void *arg)
     }
     END_TRY;
 
+    /** 创建基本包体 */
+    build_base_json(root_json, ret_code);
+
     //char *json = cJSON_Print(root_json);
     char *json = cJSON_PrintUnformatted(root_json);
     evbuffer_add(req->buffer_out, json, strlen(json));
@@ -76,6 +87,7 @@ account_demo(evhtp_request_t *req, void *arg)
     // 清除内存
     if (json) { free(json); }
     if (root_json) { cJSON_Delete(root_json); }
+    if (req_filter_data) { cJSON_Delete(req_filter_data); }
 
     evhtp_send_reply(req, EVHTP_RES_OK);
 
