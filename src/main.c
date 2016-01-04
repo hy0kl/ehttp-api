@@ -3,9 +3,8 @@
  * @author: Jerry Yang(hy0kle@gmail.com)
  * @notice: 仅支持 *nix 系统
  * TODO
- * 1. 一期不使用内存池,先出一版看效果
- * 2. redis storage 应该也配置成主从,先不实现.
- * 3. 信号安装.
+ * 1. redis storage 应该也配置成主从,先不实现.
+ * 2. 守护进程先不实现,采用 nohup + & 来代替
  * */
 #include "util.h"
 #include "init.h"
@@ -33,7 +32,7 @@ int main(int argc, char *argv[])
     /** 设置工作进程 title,有利于控制程序部署切换 */
     char prog[CONF_BUF_LEN];
     char *p = argv[0];
-    if ('.' == p[0]) { p += 2;}
+    if ('.' == p[0]) { p += 2; }
     snprintf(prog, CONF_BUF_LEN, "%s:%u %s", p, g_conf.port, argv[0]);
     logprintf("prog-title: %s", prog);
     init_setproctitle(argc, argv);
