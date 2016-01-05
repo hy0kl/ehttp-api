@@ -27,6 +27,7 @@ account_demo(evhtp_request_t *req, void *arg)
     gettimeofday(&start_tv, NULL);
 #endif
 
+    curl_buf_t    *curl_buf = NULL;
     g_error_code_e ret_code = API_OK;
     /** 响应体 json 对象 */
     cJSON *root_json = cJSON_CreateObject();
@@ -88,7 +89,7 @@ account_demo(evhtp_request_t *req, void *arg)
     } while(0);
 
     const char *api = "http://sug.so.360.cn/suggest?callback=suggest_so&encodein=utf-8&encodeout=utf-8&format=json&fields=word,obdata&word=abc";
-    curl_buf_t *curl_buf = create_curl_buf(CURL_CHUNK_BUF_LEN);
+    curl_buf = create_curl_buf(g_conf.curl_conf.chunk_buf_len);
     if (NULL == curl_buf) {
         ret_code = NEED_MORE_MEMORY;
         goto FINISH;

@@ -437,9 +437,9 @@ curl_get_api(const char *api, curl_buf_t *curl_buf)
     curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
     /* example.com is redirected, so we tell libcurl to follow redirection */
     curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, 1L);
-    /* complete connection within 100 milliseconds */
+    /* complete connection with milliseconds */
     curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT_MS, g_conf.curl_conf.connect_timeout_ms);
-    /* complete within 300 milliseconds */
+    /* complete with milliseconds */
     curl_easy_setopt(curl_handle, CURLOPT_TIMEOUT_MS, g_conf.curl_conf.timeout_ms);
     /* 防止超时信号挂起 */
     curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1);
