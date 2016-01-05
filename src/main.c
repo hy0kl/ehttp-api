@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     char *p = argv[0];
     if ('.' == p[0]) { p += 2; }
     snprintf(prog, CONF_BUF_LEN, "%s:%u %s", p, g_conf.port, argv[0]);
-    logprintf("prog-title: %s", prog);
+    zlog_debug(g_zc, "prog-title: %s", prog);
     init_setproctitle(argc, argv);
     setproctitle(prog);
 
