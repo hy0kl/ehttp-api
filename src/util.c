@@ -501,3 +501,11 @@ create_redis_cache_context(void)
 
     return c;
 }
+
+size_t
+get_date_time_str(char *buf, size_t buf_len)
+{
+    time_t t = time(NULL);
+    /** localtime() 返回的是静态指针,不需要 free() */
+    return strftime(buf, buf_len, "%Y-%m-%d %H:%M:%S", localtime(&t));
+}
