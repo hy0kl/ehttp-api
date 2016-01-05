@@ -74,7 +74,7 @@ $ sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/local/lib/libmysq
 
 传输出层采用字符串,业务使用的时候转成数字.
 
-```
+```c
 #include <stdlib.h>
 
 unsigned long

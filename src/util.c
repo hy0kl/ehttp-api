@@ -434,7 +434,8 @@ curl_get_api(const char *api, curl_buf_t *curl_buf)
     /* we pass our 'chunk' struct to the callback function */
     curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)curl_buf);
     /* some servers don't like requests that are made without a user-agent field, so we provide one */
-    curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+    curl_easy_setopt(curl_handle, CURLOPT_USERAGENT,
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36");
     /* example.com is redirected, so we tell libcurl to follow redirection */
     curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, 1L);
     /* complete connection with milliseconds */

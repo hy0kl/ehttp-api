@@ -92,10 +92,14 @@ account_demo(evhtp_request_t *req, void *arg)
     curl_buf = create_curl_buf(g_conf.curl_conf.chunk_buf_len);
     if (NULL == curl_buf) {
         ret_code = NEED_MORE_MEMORY;
+        cJSON_AddStringToObject(data, "api_data", "");
         goto FINISH;
     }
     ret_code = curl_get_api(api, curl_buf);
-    if (API_OK != ret_code) { goto FINISH; }
+    if (API_OK != ret_code) {
+        cJSON_AddStringToObject(data, "api_data", "");
+        goto FINISH;
+    }
     cJSON_AddStringToObject(data, "api_data", curl_buf->buf);
 
 FINISH:
