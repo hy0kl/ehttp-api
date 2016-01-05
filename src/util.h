@@ -89,5 +89,15 @@ void delete_curl_buf(curl_buf_t *curl_buf);
 /** 通过 get 方法从接口取数据 */
 g_error_code_e
 curl_get_api(const char *api, curl_buf_t *curl_buf);
+
+/** 创建 redis storage 连接 */
+redisContext *
+create_redis_storage_context(void);
+
+/** 创建 redis cache 连接 */
+redisContext *
+create_redis_cache_context(void);
+
+#define delete_redis_context(c) do { if ((c)) { redisFree((c)); } } while(0)
 #endif
 

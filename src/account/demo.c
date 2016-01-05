@@ -45,6 +45,17 @@ account_demo(evhtp_request_t *req, void *arg)
 
     if (API_OK != ret_code) { goto FINISH; }
 
+    /** 缓存逻辑 */
+    redisContext *c = create_redis_cache_context();
+    redisReply   *reply;
+    if (c) {
+        reply = redisCommand(c, "PING");
+        cJSON_AddStringToObject(data, "redis->PING", reply->str);
+        freeReplyObject(reply);
+
+        delete_redis_context(c);
+    }
+
     /** data 子对象 */
     cJSON *array = cJSON_CreateArray();
     cJSON_AddItemToObject(data, "demo_data", array);

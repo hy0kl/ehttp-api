@@ -463,3 +463,41 @@ FINISH:
 
     return code;
 }
+
+redisContext *
+create_redis_storage_context(void)
+{
+    struct timeval timeout = {0, g_conf.redis_storage.timeout * 1000};
+
+    redisContext *c = redisConnectWithTimeout(g_conf.redis_storage.host, g_conf.redis_storage.port, timeout);
+    if (NULL == c || c->err) {
+        if (c) {
+            redisFree(c);
+            c = NULL;
+        }
+        zlog_warn(g_zc, "Can NOT connect redis storage master: [host: %s] [port: %u]", g_conf.redis_storage.host, g_conf.redis_storage.port);
+    }
+    zlog_debug(g_zc, "Use redis storage master: [host: %s] [port: %u]", g_conf.redis_storage.host, g_conf.redis_storage.port);
+
+    return c;
+}
+
+redisContext *
+create_redis_cache_context(void)
+{
+    int index = rand() % g_conf.redis_cache_count;
+    struct timeval timeout = {0, g_conf.redis_cache_array[index].timeout * 1000};
+    redisContext *c = redisConnectWithTimeout(g_conf.redis_cache_array[index].host, g_conf.redis_cache_array[index].port, timeout);
+    if (NULL == c || c->err) {
+        if (c) {
+            redisFree(c);
+            c = NULL;
+        }
+        zlog_warn(g_zc, "Can NOT connect redis cache: [index: %d] [host: %s] [port: %u]", index,
+                g_conf.redis_cache_array[index].host, g_conf.redis_cache_array[index].port);
+    }
+    zlog_debug(g_zc, "Use redis cache: [index: %d] [host: %s] [port: %u]", index,
+            g_conf.redis_cache_array[index].host, g_conf.redis_cache_array[index].port);
+
+    return c;
+}
