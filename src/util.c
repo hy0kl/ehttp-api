@@ -477,7 +477,7 @@ create_redis_storage_context(void)
         }
         zlog_warn(g_zc, "Can NOT connect redis storage master: [host: %s] [port: %u]", g_conf.redis_storage.host, g_conf.redis_storage.port);
     }
-    zlog_debug(g_zc, "Use redis storage master: [host: %s] [port: %u]", g_conf.redis_storage.host, g_conf.redis_storage.port);
+    zlog_debug(g_zc, "[%s] Use redis storage master: [host: %s] [port: %u]", __func__, g_conf.redis_storage.host, g_conf.redis_storage.port);
 
     return c;
 }
@@ -496,7 +496,7 @@ create_redis_cache_context(void)
         zlog_warn(g_zc, "Can NOT connect redis cache: [index: %d] [host: %s] [port: %u]", index,
                 g_conf.redis_cache_array[index].host, g_conf.redis_cache_array[index].port);
     }
-    zlog_debug(g_zc, "Use redis cache: [index: %d] [host: %s] [port: %u]", index,
+    zlog_debug(g_zc, "[%s] Use redis cache: [index: %d] [host: %s] [port: %u]", __func__, index,
             g_conf.redis_cache_array[index].host, g_conf.redis_cache_array[index].port);
 
     return c;

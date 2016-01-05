@@ -31,7 +31,9 @@ account_demo(evhtp_request_t *req, void *arg)
     g_error_code_e ret_code = API_OK;
     /** 响应体 json 对象 */
     cJSON *root_json = cJSON_CreateObject();
-    cJSON *data      = cJSON_CreateObject();
+
+    cJSON *data       = NULL;
+    cJSON *cache_data = NULL;
 
     /** 处理请求参数 */
     req_param_filter_t req_filter_conf[] = {
@@ -49,12 +51,20 @@ account_demo(evhtp_request_t *req, void *arg)
     redisContext *c = create_redis_cache_context();
     redisReply   *reply;
     if (c) {
-        reply = redisCommand(c, "PING");
-        cJSON_AddStringToObject(data, "redis->PING", reply->str);
-        freeReplyObject(reply);
+        reply = redisCommand(c, "GET %s", __func__);
+        if (reply && reply->len > 0) {
+            zlog_debug(g_zc, "redis hit cache: [key: %s] [value: %s]", __func__, reply->str);
 
-        delete_redis_context(c);
+            /** 缓存有效,申请内存解析缓存数据 */
+            cache_data = cJSON_Parse(reply->str);
+            freeReplyObject(reply);
+
+            goto FINISH;
+        }
     }
+
+    /** 缓存无效,需要开辟内存来存放数据 */
+    data = cJSON_CreateObject();
 
     /** data 子对象 */
     cJSON *array = cJSON_CreateArray();
@@ -113,19 +123,37 @@ account_demo(evhtp_request_t *req, void *arg)
     }
     cJSON_AddStringToObject(data, "api_data", curl_buf->buf);
 
-FINISH:
+    /** 将生成的json对象缓存 */
+    if (c && data) {
+        char *cache_json = cJSON_PrintUnformatted(data);
 
+        /** 写带过期时间的缓存 */
+        reply = redisCommand(c, "SETEX %s %d %s", __func__, 60, cache_json);
+        freeReplyObject(reply);
+
+        if (cache_json) { free(cache_json); }
+
+        zlog_debug(g_zc, "[redis-set] SETEX %s %d %s", __func__, 60, cache_json);
+    }
+
+FINISH:
     /** 构建基本包体 */
     build_base_json(root_json, ret_code);
-    cJSON_AddItemToObject(root_json, RES_DATA, data);
+    /** cache_data, data 对象同一时间只有一个有效 */
+    if (cache_data) {
+        cJSON_AddItemToObject(root_json, RES_DATA, cache_data);
+    } else {
+        cJSON_AddItemToObject(root_json, RES_DATA, data);
+    }
 
     //char *json = cJSON_Print(root_json);
     char *json = cJSON_PrintUnformatted(root_json);
     evbuffer_add(req->buffer_out, json, strlen(json));
 
-    /** 清除内存 */
-    delete_curl_buf(curl_buf);
+    /** 清除内存,最好宗从先入后出原则,先申请的最后释放,申请和释放一一对应 */
     if (json) { free(json); }
+    delete_curl_buf(curl_buf);
+    delete_redis_context(c);
     if (root_json) { cJSON_Delete(root_json); }
     if (req_filter_data) { cJSON_Delete(req_filter_data); }
 

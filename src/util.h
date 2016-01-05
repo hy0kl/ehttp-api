@@ -98,6 +98,7 @@ create_redis_storage_context(void);
 redisContext *
 create_redis_cache_context(void);
 
+/* Disconnects and frees the context */
 #define delete_redis_context(c) do { if ((c)) { redisFree((c)); } } while(0)
 #endif
 
