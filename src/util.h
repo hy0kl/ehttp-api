@@ -100,5 +100,10 @@ create_redis_cache_context(void);
 
 /* Disconnects and frees the context */
 #define delete_redis_context(c) do { if ((c)) { redisFree((c)); } } while(0)
+
+/** 取当前时间 YYYY-mm-dd HH:MM:SS */
+size_t
+get_date_time_str(char *buf, size_t buf_len);
+
 #endif
 

@@ -123,6 +123,10 @@ account_demo(evhtp_request_t *req, void *arg)
     }
     cJSON_AddStringToObject(data, "api_data", curl_buf->buf);
 
+    char date_time_str[SMALL_BUF_LEN];
+    get_date_time_str(date_time_str, SMALL_BUF_LEN);
+    cJSON_AddStringToObject(data, "date_time_str", date_time_str);
+
     /** 将生成的json对象缓存 */
     if (c && data) {
         char *cache_json = cJSON_PrintUnformatted(data);
@@ -165,6 +169,14 @@ FINISH:
     gettimeofday(&end_tv, NULL);
     zlog_debug(g_zc, "响应时间: %ld微秒", GETUTIME(end_tv) - GETUTIME(start_tv));
 #endif
+}
+
+size_t
+get_date_time_str(char *buf, size_t buf_len)
+{
+    time_t t = time(NULL);
+    /** localtime() 返回的是静态指针,不需要 free() */
+    return strftime(buf, buf_len, "%Y-%m-%d %H:%M:%S", localtime(&t));
 }
 /* vim:set ft=c ts=4 sw=4 et fdm=marker: */
 
