@@ -78,8 +78,16 @@ account_demo(evhtp_request_t *req, void *arg)
 
         TRY
         {
-            ResultSet_T result = Connection_executeQuery(db,
-                "SELECT id, nickname, mobile, email FROM demo");
+            /** 如果传了 id,则只取 id 对应的数据. @notice 缓存逻辑写在了最外面 */
+            ResultSet_T result;
+            cJSON *id = cJSON_GetObjectItem(req_filter_data, "id");
+            if (id && id->valueint > 0) {
+                result = Connection_executeQuery(db,
+                    "SELECT id, nickname, mobile, email FROM demo WHERE id = %d", id->valueint);
+            } else {
+                result = Connection_executeQuery(db,
+                    "SELECT id, nickname, mobile, email FROM demo");
+            }
             while (ResultSet_next(result)) {
                 cJSON *obj = cJSON_CreateObject();
                 cJSON_AddItemToArray(array, obj);
