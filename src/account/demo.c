@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `demo` (
 void
 account_demo(evhtp_request_t *req, void *arg)
 {
+    g_error_code_e ret_code = API_OK;
     log_uri(req);
     set_json_header(req);
 
@@ -27,13 +28,16 @@ account_demo(evhtp_request_t *req, void *arg)
     gettimeofday(&start_tv, NULL);
 #endif
 
-    curl_buf_t    *curl_buf = NULL;
-    g_error_code_e ret_code = API_OK;
     /** 响应体 json 对象 */
     cJSON *root_json = cJSON_CreateObject();
 
     cJSON *data       = NULL;
     cJSON *cache_data = NULL;
+
+    /** 关键变量申请提前,防止出 core */
+    redisContext  *c        = NULL;
+    curl_buf_t    *curl_buf = NULL;
+    cJSON *req_filter_data  = NULL;
 
     /** 处理请求参数 */
     req_param_filter_t req_filter_conf[] = {
@@ -42,13 +46,13 @@ account_demo(evhtp_request_t *req, void *arg)
         //{"test", REQUIRED_YES, REQ_PARAM_STRING},
         REQ_PARAM_FILTER_PAD,
     };
-    cJSON *req_filter_data = cJSON_CreateObject();
+    req_filter_data = cJSON_CreateObject();
     ret_code = filter_request_parameters(req, req_filter_conf, req_filter_data);
 
     if (API_OK != ret_code) { goto FINISH; }
 
     /** 缓存逻辑 */
-    redisContext *c = create_redis_cache_context();
+    c = create_redis_cache_context();
     redisReply   *reply;
     if (c) {
         reply = redisCommand(c, "GET %s", __func__);
@@ -154,8 +158,11 @@ FINISH:
     /** cache_data, data 对象同一时间只有一个有效 */
     if (cache_data) {
         cJSON_AddItemToObject(root_json, RES_DATA, cache_data);
-    } else {
+    } else if (data) {
         cJSON_AddItemToObject(root_json, RES_DATA, data);
+    } else {
+        cJSON *empty = cJSON_CreateObject();
+        cJSON_AddItemToObject(root_json, RES_DATA, empty);
     }
 
     //char *json = cJSON_Print(root_json);
@@ -166,8 +173,8 @@ FINISH:
     if (json) { free(json); }
     delete_curl_buf(curl_buf);
     delete_redis_context(c);
-    if (root_json) { cJSON_Delete(root_json); }
     if (req_filter_data) { cJSON_Delete(req_filter_data); }
+    if (root_json) { cJSON_Delete(root_json); }
 
     /** 发送响应 */
     evhtp_send_reply(req, EVHTP_RES_OK);
