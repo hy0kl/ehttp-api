@@ -162,7 +162,7 @@ FINISH:
     char *json = cJSON_PrintUnformatted(root_json);
     evbuffer_add(req->buffer_out, json, strlen(json));
 
-    /** 清除内存,最好宗从先入后出原则,先申请的最后释放,申请和释放一一对应 */
+    /** 清除内存,最好遵从先入后出原则,先申请的最后释放,申请和释放一一对应 */
     if (json) { free(json); }
     delete_curl_buf(curl_buf);
     delete_redis_context(c);

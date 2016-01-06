@@ -321,6 +321,7 @@ filter_request_parameters(
         value = evhtp_kv_find(req->uri->query, filter->param);
 
         if (filter->required && NULL == value) {
+            zlog_error(g_zc, "%s [required_parameter: %s]", get_message(MISSING_REQUIRED_PARAMETERS), filter->param);
             ret_code = MISSING_REQUIRED_PARAMETERS;
             break;
         }
