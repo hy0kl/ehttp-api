@@ -83,3 +83,13 @@ strtoul(const char *restrict str, char **restrict endptr, int base);
 unsigned long long
 strtoull(const char *restrict str, char **restrict endptr, int base);
 ```
+
+## 如何防SQL注入
+
+1. 优先考虑使用 `Connection_prepareStatement`.
+2. 其次,由于客户端提交数据经过 filter 处理后,变成了 cJSON 对象,会对字符串中的双引号加上转义符,如果是手工拼 SQL,只要用双引号引起字符串即可防注入.形如:
+
+    ```c
+    ResultSet_T result = Connection_executeQuery(db, "SELECT id, nickname, mobile, email FROM demo WHERE email = \"%s\"", email->valuestring);
+    ```
+
