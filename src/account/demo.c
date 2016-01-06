@@ -1,5 +1,5 @@
 /**
- * @describe:
+ * @describe: 演示接口
  * @author: Jerry Yang(hy0kle@gmail.com)
 
 ```sql
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `demo` (
   `mobile` varchar(32) NOT NULL,
   `email` varchar(64) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=UTF8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=UTF8;
 ```
 
  * */

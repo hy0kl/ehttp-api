@@ -77,6 +77,12 @@ $ sudo ln -s /usr/local/mysql/lib/libmysqlclient.18.dylib /usr/local/lib/libmysq
 ```c
 #include <stdlib.h>
 
+long
+strtol(const char *restrict str, char **restrict endptr, int base);
+
+long long
+strtoll(const char *restrict str, char **restrict endptr, int base);
+
 unsigned long
 strtoul(const char *restrict str, char **restrict endptr, int base);
 
