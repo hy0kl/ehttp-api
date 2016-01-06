@@ -143,9 +143,9 @@ account_demo(evhtp_request_t *req, void *arg)
         reply = redisCommand(c, "SETEX %s %d %s", __func__, 60, cache_json);
         freeReplyObject(reply);
 
-        if (cache_json) { free(cache_json); }
-
         zlog_debug(g_zc, "[redis-set] SETEX %s %d %s", __func__, 60, cache_json);
+
+        if (cache_json) { free(cache_json); }
     }
 
 FINISH:
