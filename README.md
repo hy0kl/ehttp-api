@@ -11,6 +11,7 @@ http libevent api service
 - libzdb https://github.com/mverbert/libzdb http://www.tildeslash.com/libzdb
 - zlog http://hardysimpson.github.com/zlog/
 - TCMalloc https://github.com/gperftools/gperftools
+- openssl https://github.com/openssl/openssl
 
 ## 以下不需要安装
 - cJSON https://github.com/kbranigan/cJSON http://cjson.sourceforge.net/
