@@ -22,6 +22,7 @@ parse_server_config()
     }
 
     fread(data, 1, len, fp);
+    data[len] = '\0';
     fclose(fp);
 
     /** 解析 json 的配置文件 */
