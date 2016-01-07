@@ -139,6 +139,12 @@ account_demo(evhtp_request_t *req, void *arg)
     get_date_time_str(date_time_str, SMALL_BUF_LEN);
     cJSON_AddStringToObject(data, "date_time_str", date_time_str);
 
+    snprintf(date_time_str, SMALL_BUF_LEN, "%ld", time(NULL));
+    char md5_buf[SMALL_BUF_LEN];
+    md5_buf[0] = '\0';
+    md5sum(date_time_str, md5_buf, SMALL_BUF_LEN);
+    cJSON_AddStringToObject(data, "md5sum(time(NULL))", md5_buf);
+
     /** 将生成的json对象缓存 */
     if (c && data) {
         char *cache_json = cJSON_PrintUnformatted(data);

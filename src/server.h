@@ -32,6 +32,8 @@
 #include <zdb.h>
 #include <zlog.h>
 
+#include <openssl/md5.h>
+
 #include "../contrib/cjson/cJSON.h"
 
 /**

@@ -3,6 +3,7 @@
 
 #include "../server.h"
 #include "../util.h"
+#include "../crypto_wrap.h"
 
 void account_demo(evhtp_request_t *req, void *arg);
 

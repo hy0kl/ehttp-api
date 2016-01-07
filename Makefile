@@ -6,6 +6,7 @@ DEPEND_LIB = -lcurl \
 		 -lpthread \
 		 -lm \
 		 -lhiredis \
+		 -lcrypto \
 		 -ltcmalloc
 
 INCLUDEDIR = -I src/ \
@@ -17,6 +18,7 @@ CFLAGS = -g -Wall -Winline -pipe -fPIC
 
 TARGET = api-server
 OBJS = src/main.o src/util.o src/init.o \
+	   src/crypto_wrap.o \
 	   src/account/demo.o \
 	   src/setproctitle.o \
 	   contrib/cjson/cJSON.o
