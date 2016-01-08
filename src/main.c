@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
 
     // 注册路由
     evhtp_set_glob_cb(htp, "/account/demo", account_demo, NULL);
+    evhtp_set_glob_cb(htp, "/keepalived/ping", keepalived_ping, NULL);
     evhtp_set_glob_cb(htp, "*", default_router, NULL);
 
     evhtp_bind_socket(htp, g_conf.ip, g_conf.port, g_conf.backlog);

@@ -266,6 +266,27 @@ default_router(evhtp_request_t *req, void *arg)
     evhtp_send_reply(req, EVHTP_RES_OK);
 }
 
+void keepalived_ping(evhtp_request_t *req, void *arg)
+{
+    log_uri(req);
+    set_json_header(req);
+
+    cJSON *root_json = cJSON_CreateObject();
+    build_base_json(root_json, API_OK);
+    cJSON *data = cJSON_CreateObject();
+    cJSON_AddItemToObject(root_json, "data", data);
+    cJSON_AddStringToObject(data, "ping", "pong");
+
+    char *json = cJSON_PrintUnformatted(root_json);
+    evbuffer_add(req->buffer_out, json, strlen(json));
+
+    // 清除内存
+    if (json) { free(json); }
+    if (root_json) { cJSON_Delete(root_json); }
+
+    evhtp_send_reply(req, EVHTP_RES_OK);
+}
+
 g_error_code_e
 get_post_data_raw(const evhtp_request_t *req, char *buf, size_t buf_len)
 {
