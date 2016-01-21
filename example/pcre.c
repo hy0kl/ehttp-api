@@ -47,7 +47,7 @@ int main(int argc, char **argv)
     int erroffset = -1;
 
     if (NULL == (p_pcre = pcre_compile(pattern, 0 | PCRE_UNGREEDY, &errptr, &erroffset, NULL))) {
-        printf("errptr = %s, erroffset = %d\n", errptr, erroffset);
+        printf("PCRE compilation failed at offset %d, %s\n", erroffset, errptr);
         return 1;
     }
 
