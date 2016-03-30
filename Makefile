@@ -7,7 +7,7 @@ DEPEND_LIB = -lcurl \
 		 -lm \
 		 -lhiredis \
 		 -lcrypto \
-		 -ltcmalloc
+		 -ljemalloc
 
 INCLUDEDIR = -I src/ \
 			 -I src/account/ \

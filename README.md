@@ -10,8 +10,9 @@ http libevent api service
 - libevhtp https://github.com/ellzey/libevhtp
 - libzdb https://github.com/mverbert/libzdb http://www.tildeslash.com/libzdb
 - zlog http://hardysimpson.github.com/zlog/
-- TCMalloc https://github.com/gperftools/gperftools
+- jemalloc https://github.com/jemalloc/jemalloc
 - openssl https://github.com/openssl/openssl
+> - TCMalloc https://github.com/gperftools/gperftools
 
 ## 以下不需要安装
 - cJSON https://github.com/kbranigan/cJSON http://cjson.sourceforge.net/

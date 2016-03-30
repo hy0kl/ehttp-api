@@ -44,3 +44,4 @@ api-server
 example/*.log
 server.json
 zlog.conf
+core*
